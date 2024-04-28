@@ -6,15 +6,15 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:31:09 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/26 02:26:16 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/27 22:54:02 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ALL_H
 # define ALL_H
 
-#include <struct.h>
 #include <lib.h>
+#include <struct.h>
 #include <defe.h>
 
 #endif

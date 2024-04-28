@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 02:23:54 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/26 02:24:22 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/27 22:05:07 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,3 @@ size_t	ft_strlen(char *str)
 	return (size);
 }
 
-void	print_data(t_data *data)
-{
-	printf("\n\nnum_philo :[%ld] num_eat :[%ld] time_die :[%ld] time_eat :[%ld] time_sleep :[%ld]\n\n\n",
-		data->param.number_philo, data->param.number_eat,
-		data->param.time_to_die, data->param.time_to_eat,
-		data->param.time_to_sleep);
-}

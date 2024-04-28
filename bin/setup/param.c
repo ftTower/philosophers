@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 02:22:50 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/26 02:23:15 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/26 18:10:05 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ bool	ft_atoi(const char *str, long *out_value)
 	}
 	if (str[i] != '\0')
 		return (true);
-	*out_value = value * sign;
-	return (true);
+	return (*out_value = value * sign, true);
 }
 
 bool	set_param(t_data *data, char **argv)
@@ -53,7 +52,10 @@ bool	set_param(t_data *data, char **argv)
 			&data->param.time_to_die) && ft_atoi(argv[3],
 			&data->param.time_to_eat) && ft_atoi(argv[4],
 			&data->param.time_to_sleep))
-		return (ft_atoi(argv[5], &data->param.number_eat),
-			true);
+		return (data->param.time_to_die *= 1e3, data->param.time_to_eat *= 1e3,
+			data->param.time_to_sleep *= 1e3, ft_atoi(argv[5],
+				&data->param.number_eat), (data->param.time_to_die > 6e3
+				&& data->param.time_to_eat > 6e3
+				&& data->param.time_to_sleep > 6e3));
 	return (false);
 }

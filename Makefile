@@ -6,19 +6,24 @@
 #    By: tauer <tauer@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 17:59:50 by tauer             #+#    #+#              #
-#    Updated: 2024/04/26 02:27:05 by tauer            ###   ########.fr        #
+#    Updated: 2024/04/29 01:03:44 by tauer            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_DIR		=	src
+SRC_DIR		=	bin
 BUILD_DIR	=	build
 NAME		=	philo
 CFLAG		=	-Wall -Wextra -Werror -I./includes -g3
 
-SRC			=	./bin/main.c \
-				./bin/setup/data.c \
-				./bin/setup/param.c \
-				./bin/utils.c/utils.c \
+SRC			=	$(SRC_DIR)/main.c \
+				$(SRC_DIR)/setup/data.c \
+				$(SRC_DIR)/setup/param.c \
+				$(SRC_DIR)/setup/philo.c \
+				$(SRC_DIR)/setup/fork.c \
+				$(SRC_DIR)/utils.c/utils.c \
+				$(SRC_DIR)/utils.c/print.c \
+				$(SRC_DIR)/utils.c/printer.c \
+				$(SRC_DIR)/process/thread_handle.c \
 			
 CC			=	cc 
 
