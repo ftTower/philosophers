@@ -6,7 +6,7 @@
 #    By: tauer <tauer@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 17:59:50 by tauer             #+#    #+#              #
-#    Updated: 2024/04/29 01:03:44 by tauer            ###   ########.fr        #
+#    Updated: 2024/04/29 15:42:35 by tauer            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ SRC			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/utils.c/utils.c \
 				$(SRC_DIR)/utils.c/print.c \
 				$(SRC_DIR)/utils.c/printer.c \
+				$(SRC_DIR)/utils.c/setter.c \
+				$(SRC_DIR)/utils.c/exit.c \
 				$(SRC_DIR)/process/thread_handle.c \
 			
 CC			=	cc 

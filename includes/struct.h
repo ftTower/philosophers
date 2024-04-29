@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:47:20 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/29 01:42:47 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/29 17:03:35 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,15 @@ typedef struct s_param
 	long			time_to_sleep;
 }					t_param;
 
+typedef struct s_stat
+{
+	long	memory_allocated;
+} t_stat;
 typedef struct s_data
 {
 	t_fork			*fork;
 	t_philo			*philo;
+	t_stat			stat;
 	t_param			param;
 }					t_data;
 

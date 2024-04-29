@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:56:13 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/29 01:45:29 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/29 15:15:58 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	print_dclr(long to_print, t_clr clr_code, bool lignfeed)
 		printf(BLA "%ld" RST, to_print);
 	else if (clr_code == WHITE)
 		printf(WHI "%ld" RST, to_print);
+	else if (clr_code == RE_WH)
+		printf(WHI "%ld\n" RST, to_print);
 	else if (clr_code == WH_BL)
 		printf(BLU "%ld" RST, to_print);
 	else if (clr_code == GREEN)
@@ -48,6 +50,8 @@ void	print_sclr(char *to_print, t_clr clr_code, bool lignfeed)
 		printf(WHI "%s" RST, to_print);
 	else if (clr_code == GREEN)
 		printf(GRE "%s" RST, to_print);
+	else if (clr_code == RE_WH)
+		printf(RED "\n❌ %s" RST, to_print);
 	else if (clr_code == WH_BL || clr_code == WH_RE)
 		printf(WHI "%s" RST, to_print);
 	if (lignfeed)
@@ -63,4 +67,3 @@ void	tprint(char *msg, long num, bool is_num, t_clr clr_code)
 	if (is_num)
 		print_dclr(num, clr_code, true);
 }
-

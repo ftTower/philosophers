@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:53 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/29 01:05:37 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/29 15:58:18 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ bool	add_fork(t_data *data, long index)
 	new_fork = malloc(sizeof(t_fork));
 	if (!new_fork)
 		return (true);
-	else if (!list)
+	data->stat.memory_allocated += (sizeof(t_fork));
+	if (!list)
 	{
 		free(data->fork);
 		data->fork = NULL;
