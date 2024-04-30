@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:56:13 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/29 15:15:58 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/01 00:47:42 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	print_dclr(long to_print, t_clr clr_code, bool lignfeed)
 		printf(WHI "%ld" RST, to_print);
 	else if (clr_code == RE_WH)
 		printf(WHI "%ld\n" RST, to_print);
+	else if (clr_code == YELLOW)
+		printf(YEL "%ld" RST, to_print);
 	else if (clr_code == WH_BL)
 		printf(BLU "%ld" RST, to_print);
 	else if (clr_code == GREEN)
@@ -42,6 +44,8 @@ void	print_sclr(char *to_print, t_clr clr_code, bool lignfeed)
 		printf(CLR "");
 	else if (clr_code == RED_)
 		printf(RED "%s" RST, to_print);
+	else if (clr_code == YELLOW)
+		printf(YEL "%s" RST, to_print);
 	else if (clr_code == BLUE)
 		printf(BLU "%s" RST, to_print);
 	else if (clr_code == BLACK)

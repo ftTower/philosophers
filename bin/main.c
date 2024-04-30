@@ -6,15 +6,15 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:47:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/30 02:19:28 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/01 00:58:51 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <all.h>
 
-void*	routine(void *test)
+void*	routine(void *data)
 {
-	(void)test;
+	(void)data;
 	return (NULL);
 }
 
@@ -35,6 +35,9 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	if (setup(&data, argv, argc))
+	{
+		print_data(&data);
 		simulation(&data);
+	}
 	return (texit(&data, EXIT_SUCCESS), 0);
 }

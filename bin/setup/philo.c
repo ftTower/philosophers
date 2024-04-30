@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:06 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/30 01:39:52 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/01 00:59:05 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,30 @@ bool	add_philo(t_data *data, long index)
 		free(data->philo);
 		data->philo = NULL;
 	}
-	return (new_philo->is_full = false, new_philo->right_fork = index - 1,
+	return (new_philo->prev = NULL,new_philo->is_full = false, new_philo->right_fork = index - 1,
 		new_philo->left_fork = index % data->param.number_philo,
 		new_philo->last_meal = -1, new_philo->next = list,
-		new_philo->pos = index, new_philo->statut = UNASIGNED,
+		new_philo->pos = data->param.number_philo - index, new_philo->statut = UNASIGNED,
 		data->philo = new_philo, false);
+}
+
+void	philo_finisher(t_data *data)
+{
+	(void)data;
+	t_philo *real;
+	t_philo *temp;
+
+	real = data->philo;
+	temp = data->philo;
+	while(real)
+	{
+		if (real->pos != 0)
+		{
+			real->prev = temp;
+			temp = temp->next;
+		}
+		real = real->next;
+	}
 }
 
 bool	philo_maker(t_data *data)
@@ -56,6 +75,7 @@ bool	philo_maker(t_data *data)
 		if (add_philo(data, index++))
 			return (print_sclr("", CLEAR, false),
 				print_sclr("failed to make a philo", RED_, true), false);
+	philo_finisher(data);
 	return (true);
 }
 
@@ -65,5 +85,5 @@ void	thread_maker(t_data *data)
 
 	index = 1;
 	while (index <= data->param.number_philo)
-		thread_handler(data, index++, routine, CREATE);
+		thread_handler(data, index++, routine(data), CREATE);
 }

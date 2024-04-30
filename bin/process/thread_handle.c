@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 21:03:59 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/30 00:37:39 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/01 00:36:25 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,6 @@ void	thread_handler(t_data *data, long pos, void *(*foo)(void *), t_cmd code)
 			break ;
 		philo = philo->next;
 	}
-	thread_manager(data, philo, foo, code);
+	if (philo)
+		thread_manager(data, philo, foo, code);
 }

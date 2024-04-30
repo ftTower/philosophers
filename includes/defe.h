@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:31:45 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/30 02:32:10 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/01 00:58:39 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef enum e_clr
 	BLACK,
 	GREEN,
 	CLEAR,
+	YELLOW,
 }		t_clr;
 
 typedef enum e_cmd
@@ -87,7 +88,7 @@ bool	philo_statut_setter(t_data *data, long pos, t_statut statut);
 void	simulation(t_data *data);
 
 //* routine
-void	*routine(void *test);
+void	*routine(void *data);
 
 //! exit
 void	texit(t_data *data, bool exit_succes);
