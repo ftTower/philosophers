@@ -6,15 +6,15 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:47:20 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/29 17:03:35 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/30 02:14:45 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DEF_H
 # define DEF_H
 
-// # define CLR "\033c"
-# define CLR ""
+# define CLR "\033c"
+// # define CLR ""
 # define RST "\033[0m"
 # define RED "\033[1;31m"
 # define BLU "\033[1;34m"
@@ -23,6 +23,14 @@
 # define GRE "\033[1;32m"
 
 typedef pthread_mutex_t t_mtx;
+
+typedef enum e_statut
+{
+	EATING,
+	SLEEPING,
+	THINKIN,
+	UNASIGNED,
+}	t_statut;
 
 typedef struct s_fork
 {
@@ -38,6 +46,7 @@ typedef struct s_philo
 	bool			is_full;
 	long			left_fork;
 	long			right_fork;
+	t_statut		statut;
 	pthread_t		id;
 	struct s_philo	*next;
 }					t_philo;

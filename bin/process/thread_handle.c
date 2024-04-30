@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 21:03:59 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/29 17:18:42 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/30 00:37:39 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	thread_manager(t_data *data, t_philo *philo, void *(*foo)(void *),
 		error_code = pthread_create(&philo->id, NULL, foo, NULL);
 	else if (code == DESTROY)
 		pthread_exit(&philo->id);
+	else if (code == JOIN)
+		pthread_join(philo->id, NULL);
 	error_handler(data, error_code, philo);
 }
 

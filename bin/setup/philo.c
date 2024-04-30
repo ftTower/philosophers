@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:06 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/29 17:09:20 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/30 01:39:52 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ bool	add_philo(t_data *data, long index)
 	return (new_philo->is_full = false, new_philo->right_fork = index - 1,
 		new_philo->left_fork = index % data->param.number_philo,
 		new_philo->last_meal = -1, new_philo->next = list,
-		new_philo->pos = index,data->philo = new_philo, false);
+		new_philo->pos = index, new_philo->statut = UNASIGNED,
+		data->philo = new_philo, false);
 }
 
 bool	philo_maker(t_data *data)
@@ -60,9 +61,9 @@ bool	philo_maker(t_data *data)
 
 void	thread_maker(t_data *data)
 {
-	long index;
+	long	index;
 
 	index = 1;
-	while(index <= data->param.number_philo)
+	while (index <= data->param.number_philo)
 		thread_handler(data, index++, routine, CREATE);
 }

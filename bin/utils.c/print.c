@@ -6,50 +6,76 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 22:04:56 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/29 17:30:32 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/30 02:32:34 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <all.h>
 
-void	print_scenario_philo(bool full_info, t_philo *philo, t_fork *fork)
+void	print_philo_fork(t_philo *philo, t_fork *fork)
+{
+	return (print_sclr("PHILOSOPHER N ", WHITE, false), print_dclr(philo->pos,
+			BLUE, false), print_sclr(" | ASSOCIATED FORK -> ", WHITE, false),
+		print_dclr(fork->pos, RED_, false), print_sclr(" | LEFT FORK -> ",
+			WHITE, false), print_dclr(philo->left_fork, BLUE, false),
+		print_sclr(" | RIGHT FORK-> ", WHITE, false),
+		print_dclr(philo->right_fork, BLUE, false),
+		 print_sclr(" | THREAD ID -> ", WHITE, false),
+		  print_dclr(philo->id, BLUE, true));
+}
+
+void	print_simulation(t_philo *philo)
 {
 	print_sclr("PHILOSOPHER N ", WHITE, false);
 	print_dclr(philo->pos, BLUE, false);
-	print_sclr(" -> ", WHITE, false);
-	if (philo->is_full)
-		print_sclr("IS FULL   ", RED_, false);
+	if (philo->statut == THINKIN)
+		print_sclr(" IS THINKING ", GREEN, true);
+	else if (philo->statut == SLEEPING)
+		print_sclr(" IS SLEEPING ", GREEN, true);
+	else if (philo->statut == EATING)
+		print_sclr(" IS EATING ", GREEN, true);
 	else
-		print_sclr("IS HUNGRY ", GREEN, false);
-	print_sclr(" | ASSOCIATED FORK -> ", WHITE, false);
-	print_dclr(fork->pos, RED_, false);
-	if (full_info)
-		return (print_sclr(" | LEFT FORK -> ", WHITE, false),
-			print_dclr(philo->left_fork, BLUE, false),
-			print_sclr(" | RIGHT FORK-> ", WHITE, false),
-			print_dclr(philo->right_fork, BLUE, false),
-			print_sclr(" | THREAD ID -> "
-			, WHITE, false), print_dclr(philo->id, BLUE, true));
-	return (print_sclr("\n", WHITE, false));
+		print_sclr(" IS UNASIGNED ", RED_, true);
 }
 
-void	print_philo(t_data *data, bool got_fork, bool need_clear)
+void	print_philo_info(t_philo *philo)
+{
+	print_simulation(philo);
+	print_sclr("AND ", WHITE, false);
+	if (philo->is_full)
+		print_sclr("IS FULL 💀", WHITE, true);
+	else
+	{
+		print_sclr("IS NOT FULL ", GREEN, false);
+		print_sclr("LAST MEAL (", WHITE, false);
+		print_dclr(philo->last_meal, BLUE, false);
+		print_sclr(")", WHITE, true);
+	}
+}
+
+void	print_philo(t_data *data, bool need_clear, bool need_sleep, t_cmd code)
 {
 	t_philo	*philo;
 	t_fork	*fork;
 
 	philo = data->philo;
 	fork = data->fork;
-	print_sclr("\n\n", WHITE, false);
+	print_sclr("\n", WHITE, false);
 	if (need_clear)
 		print_sclr("", CLEAR, false);
 	while (philo && fork)
 	{
-		print_scenario_philo(got_fork, philo, fork);
+		if (code == PRINT_F_INFO)
+			print_philo_fork(philo, fork);
+		// else if (code == PRINT_P_INFO)
+		// 	print_philo_info(philo);
+		else if (code == PRINT_SIMULATION)
+			print_simulation(philo);
 		philo = philo->next;
 		fork = fork->next;
 	}
-	sleep(3);
+	if (need_sleep)
+		sleep(3);
 }
 
 void	print_table(t_data *data)
@@ -68,5 +94,7 @@ void	print_table(t_data *data)
 void	print_data(t_data *data)
 {
 	print_table(data);
-	print_philo(data, true, true);
+	print_philo(data, true, false, PRINT_F_INFO);
+	print_philo(data, false, false, PRINT_P_INFO);
+	print_sclr("", CLEAR, false);
 }

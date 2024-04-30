@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 14:29:34 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/29 16:59:09 by tauer            ###   ########.fr       */
+/*   Updated: 2024/04/30 02:11:09 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,25 @@ bool	philo_bool_setter(t_data *data, long pos, t_set which_code, bool to_set)
 		texit(data, EXIT_FAILURE), true);
 }
 
-t_philo	*philo_getter(t_data *data, long pos)
+bool	philo_statut_setter(t_data *data, long pos, t_statut statut)
 {
 	t_philo	*philo;
 
 	philo = data->philo;
 	while (philo)
 	{
-		printf("%lu - %lu\n", philo->pos, pos);
-		if (philo->pos == pos)
-			return (philo);
+		if (philo->pos == pos && statut == EATING)
+			return (philo->statut = EATING, false);
+		else if (philo->pos == pos && statut == THINKIN)
+			return (philo->statut = THINKIN, false);
+		else if (philo->pos == pos && statut == SLEEPING)
+			return (philo->statut = SLEEPING, false);
+		else if (philo->pos == pos && statut == UNASIGNED)
+			return (philo->statut = UNASIGNED, false);
 		philo = philo->next;
 	}
-	return (tprint("failed on getting | philo->pos = ", pos, true, RE_WH),
-		texit(data, EXIT_FAILURE), NULL);
+	return (tprint("failed on setting statut | philo->pos = ", pos, true,
+			RE_WH), texit(data, EXIT_FAILURE), true);
 }
 
 bool	philo_long_setter(t_data *data, long pos, t_set which_code, long to_set)
