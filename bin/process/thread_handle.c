@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 21:03:59 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/01 00:36:25 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/01 18:27:40 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,21 @@ void	thread_handler(t_data *data, long pos, void *(*foo)(void *), t_cmd code)
 	}
 	if (philo)
 		thread_manager(data, philo, foo, code);
+}
+
+void	mutex_handler(t_data *data ,t_mtx *mutex, t_cmd code)
+{
+	int check;
+	
+	check = 0;
+	if (code == LOCK)
+		check = pthread_mutex_lock(mutex);
+	else if (code == UNLOCK)
+		check = pthread_mutex_unlock(mutex);
+	else if (code == M_CREATE)
+		check = pthread_mutex_init(mutex, NULL);
+	else
+		print_sclr("wrong code for mutex handler.", RED_, true);
+	if (check != 0)
+		texit(data, EXIT_FAILURE);
 }

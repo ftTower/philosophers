@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:47:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/01 00:58:51 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/02 23:53:17 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ bool	setup(t_data *data, char **argv, int argc)
 	null_data(data);
 	if ((argc == 5 || argc == 6) && set_param(data, argv) && philo_maker(data)
 		&& fork_maker(data))
-		return (thread_maker(data),print_sclr("setup ✅", GREEN, true), sleep(1), print_sclr("",
+		return (print_sclr("setup ✅", GREEN, true), sleep(1), print_sclr("",
 				CLEAR, false), true);
 	return (print_sclr("setup ❌", RED_, true), sleep(1), print_sclr("", CLEAR,
 			false), false);

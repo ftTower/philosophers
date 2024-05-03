@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:31:45 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/01 00:58:39 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/01 18:28:28 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ typedef enum e_cmd
 	CREATE,
 	JOIN,
 	DESTROY,
+	M_CREATE,
+	LOCK,
+	UNLOCK,
 	PRINT_SIMULATION,
 	PRINT_P_INFO,
 	PRINT_F_INFO,
@@ -65,6 +68,7 @@ void	print_data(t_data *data);
 //! process thread
 void	thread_handler(t_data *data, long pos, void *(*foo)(void *),
 			t_cmd code);
+void	mutex_handler(t_data *data ,t_mtx *mutex, t_cmd code);
 
 //! printer
 void	tprint(char *msg, long num, bool is_num, t_clr clr_code);

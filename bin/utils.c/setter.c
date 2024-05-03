@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 14:29:34 by tauer             #+#    #+#             */
-/*   Updated: 2024/04/30 02:11:09 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/01 18:28:59 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	philo_bool_setter(t_data *data, long pos, t_set which_code, bool to_set)
 	while (philo)
 	{
 		if (philo->pos == pos && which_code == FULL)
-			return (philo->is_full = to_set, false);
+			return (mutex_handler(data, &philo->mutex, LOCK),philo->is_full = to_set, false);
 		philo = philo->next;
 	}
 	return (tprint("failed on setting bool | philo->pos = ", pos, true, RE_WH),
