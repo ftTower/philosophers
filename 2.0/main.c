@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 01:01:13 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/04 02:28:06 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/04 03:03:38 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void					thread_handler(t_data *data, t_philo *philo,
 void					mutex_handler(t_data *data, mtx *mutex, t_thread code);
 bool					get_bool(t_data *data, mtx *mutex, bool *value);
 long					get_time(t_data *data, t_metric code);
+bool					end(t_data *data);
 
 bool	ft_atoi(const char *str, long *out_value)
 {
@@ -142,6 +143,27 @@ long	get_time(t_data *data, t_metric code)
 	return (s_exit(data, EXIT_FAILURE), -1);
 }
 
+void	t_usleep(long usec, t_data *data)
+{
+	long start;
+	long elapsed;
+	long rest;
+
+	start = get_time(data, MICROSECOND);
+	while(get_time(data, MICROSECOND) - start < usec)
+	{
+		if (end(data))
+			break ;
+		elapsed = gettime(MICROSECOND) - start;
+		rest = usec - elapsed;
+		if (rest > 1e3)
+			usleep(rest / 2);
+		else
+			while(get_time(data, MICROSECOND) - start < usec)
+				;
+	}
+}
+
 void	wait_threads(t_data *data)
 {
 	while (!get_bool(data, data->table, &data->b_ready))
@@ -155,6 +177,11 @@ void	*routine(void *data)
 	philo = (t_philo *)data;
 	printf("[ %ld ]\n", philo->id);
 	wait_threads(philo->data);
+	while (!end(data))
+	{
+
+	}
+
 	return (NULL);
 }
 
@@ -262,9 +289,10 @@ bool	setup(t_data *data, char **argv)
 	if (ft_atoi(argv[0], &data->n_philo) && ft_atoi(argv[1], &data->t_die)
 		&& ft_atoi(argv[2], &data->t_eat) && ft_atoi(argv[3], &data->t_sleep))
 		return (data->t_die *= 1e3, data->t_eat *= 1e3, data->t_sleep *= 1e3,
-			ft_atoi(argv[4], &data->n_meal), data->b_ready = false,data->philo = s_malloc(data,
-				data->n_philo * sizeof(t_philo)), philos_knowledge(data), print_data(data),
-			(data->t_die < 6e3 && data->t_eat < 6e3 && data->t_sleep < 6e3));
+			ft_atoi(argv[4], &data->n_meal), data->b_ready = false,
+			data->philo = s_malloc(data, data->n_philo * sizeof(t_philo)),
+			philos_knowledge(data), print_data(data), (data->t_die < 6e3
+				&& data->t_eat < 6e3 && data->t_sleep < 6e3));
 	return (true);
 }
 
@@ -277,8 +305,8 @@ void	simulation(t_data *data)
 	index = 0;
 	while (index < data->n_philo)
 		thread_handler(data, &data->philo[index++], T_CREATE);
-	set_bool(data, data->table, &data->b_ready, true);
 	data->t_simulation = get_time(data, MILLISECOND);
+	set_bool(data, data->table, &data->b_ready, true);
 	index = 0;
 	while (index < data->n_philo)
 		thread_handler(data, &data->philo[index++], T_JOIN);
