@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 01:01:13 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/05 01:18:25 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/07 02:23:54 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,13 @@ bool	ft_atoi(const char *str, long *out_value)
 
 void	s_exit(t_data *data, int exit_statut)
 {
-	long index;
+	long	index;
 
 	index = -1;
-	while(++index < data->n_philo)
+	while (++index < data->n_philo)
 		thread_handler(data, &data->philo[index], M_DESTROY);
+	mutex_handler(data, data->table, M_DESTROY);
+	mutex_handler(data, data->write, M_DESTROY);
 	if (data->philo)
 		free(data->philo);
 	exit(exit_statut);
@@ -267,7 +269,6 @@ void	*routine(void *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	// printf("[ %ld ]\n", philo->id);
 	wait_threads(philo->data);
 	while (!end(data))
 	{
@@ -275,7 +276,7 @@ void	*routine(void *data)
 		eat(philo);
 		//! sleep
 		print_statut(SLEEP, data, philo, false);
-		printf("TIME SLEEP %ld\n", philo->data->t_sleep);
+		// printf("TIME SLEEP %ld\n", philo->data->t_sleep);
 		t_usleep(philo->data->t_sleep, data);
 		//! thinkin
 		thinking(philo);
@@ -294,7 +295,7 @@ void	thread_handler(t_data *data, t_philo *philo, t_thread code)
 		ret_check = pthread_join(philo->thread, NULL);
 	else
 		ret_check = printf("wrong code for handling threads\n");
-	if (ret_check > 0 || ret_check < 0)
+	if (ret_check != 0)
 		s_exit(data, EXIT_FAILURE);
 }
 
@@ -313,7 +314,7 @@ void	mutex_handler(t_data *data, mtx mutex, t_thread code)
 		ret_check = pthread_mutex_destroy(&mutex);
 	else
 		ret_check = printf("wrong code for handling mutex\n");
-	if (ret_check > 0 || ret_check < 0)
+	if (ret_check != 0)
 		s_exit(data, EXIT_FAILURE);
 }
 
@@ -352,7 +353,6 @@ void	philos_knowledge(t_data *data)
 		data->philo[index].n_meal = 0;
 		data->philo[index].dead = false;
 		data->philo[index].data = data;
-		// data->philo[index].philo = s_malloc(data, sizeof(mtx));
 		mutex_handler(data, data->philo[index].philo, M_INIT);
 		mutex_handler(data, data->philo[index].l_fork, M_INIT);
 	}
@@ -405,8 +405,8 @@ bool	setup(t_data *data, char **argv)
 		&& ft_atoi(argv[2], &data->t_eat) && ft_atoi(argv[3], &data->t_sleep))
 		return (data->t_die *= 1e3, data->t_eat *= 1e3, data->t_sleep *= 1e3,
 			ft_atoi(argv[4], &data->n_meal), data->b_ready = false,
-			data->b_end = false, mutex_handler(data, data->table, M_INIT),
-			mutex_handler(data, data->write, M_INIT),
+			data->b_end = false,  mutex_handler(data,
+				data->table, M_INIT), mutex_handler(data, data->write, M_INIT),
 			data->philo = s_malloc(data, data->n_philo * sizeof(t_philo)),
 			philos_knowledge(data), print_data(data), (data->t_die < 6e3
 				&& data->t_eat < 6e3 && data->t_sleep < 6e3));
@@ -419,6 +419,8 @@ void	simulation(t_data *data)
 
 	// data->table = s_malloc(data, sizeof(mtx));
 	// data->write = s_malloc(data, sizeof(mtx));
+	if (!data->philo)
+		s_exit(data, EXIT_FAILURE);
 	index = -1;
 	while (++index < data->n_philo)
 		thread_handler(data, &data->philo[index], T_CREATE);
