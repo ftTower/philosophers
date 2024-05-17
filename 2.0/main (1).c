@@ -6,10 +6,11 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 01:01:13 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/16 16:59:07 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/17 16:42:05 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -27,9 +28,9 @@ typedef struct s_philo
 	long				n_meal;
 	bool				dead;
 	pthread_t			thread;
-	mtx					l_fork;
-	mtx					*r_fork;
-	mtx					philo;
+	mtx					*l_fork;
+	mtx					**r_fork;
+	mtx					*philo;
 	t_data				*data;
 }						t_philo;
 
@@ -44,8 +45,8 @@ struct					s_data
 	long				t_simulation;
 	bool				b_end;
 	bool				b_ready;
-	mtx					table;
-	mtx					write;
+	mtx					*table;
+	mtx					*write;
 	pthread_t			monitor;
 	t_philo				*philo;
 }						data;
@@ -53,6 +54,7 @@ struct					s_data
 typedef enum e_thread
 {
 	T_CREATE,
+	T_MONITOR_CREATE,
 	T_JOIN,
 	M_INIT,
 	M_LOCK,
@@ -138,6 +140,25 @@ bool	ft_atoi(const char *str, long *out_value)
 	return (*out_value = value * sign, true);
 }
 
+void	s_exit(t_data *data, int exit_statut)
+{
+	// long	index;
+	// index = -1;
+	// while (++index < data->n_philo)
+	// {
+	// mutex_handler(data, &data->philo[index].philo, M_DESTROY);
+	// mutex_handler(data, &data->philo[index].l_fork, M_DESTROY);
+	// }
+	// mutex_handler(data, data->table, M_DESTROY);
+	// mutex_handler(data, data->write, M_DESTROY);
+	if (data->philo)
+	{
+		free(data->philo);
+		data->philo = NULL;
+	}
+	exit(exit_statut);
+}
+
 // void	s_exit(t_data *data, int exit_statut)
 // {
 // 	long	index;
@@ -145,11 +166,15 @@ bool	ft_atoi(const char *str, long *out_value)
 // 	index = -1;
 // 	while (++index < data->n_philo)
 // 	{
-// 		mutex_handler(data, &data->philo[index].philo, M_DESTROY);
-// 		mutex_handler(data, &data->philo[index].l_fork, M_DESTROY);
+// 		if (pthread_mutex_destroy(&data->philo[index].philo) != 0)
+// 			fprintf(stderr, "Failed to destroy philo mutex\n");
+// 		if (pthread_mutex_destroy(&data->philo[index].l_fork) != 0)
+// 			fprintf(stderr, "Failed to destroy left fork mutex\n");
 // 	}
-// 	mutex_handler(data, &data->table, M_DESTROY);
-// 	mutex_handler(data, &data->write, M_DESTROY);
+// 	if (pthread_mutex_destroy(&data->table) != 0)
+// 		fprintf(stderr, "Failed to destroy table mutex\n");
+// 	if (pthread_mutex_destroy(&data->write) != 0)
+// 		fprintf(stderr, "Failed to destroy write mutex\n");
 // 	if (data->philo)
 // 	{
 // 		free(data->philo);
@@ -157,30 +182,6 @@ bool	ft_atoi(const char *str, long *out_value)
 // 	}
 // 	exit(exit_statut);
 // }
-
-void s_exit(t_data *data, int exit_statut)
-{
-    long index;
-
-    index = -1;
-    while (++index < data->n_philo)
-    {
-        if (pthread_mutex_destroy(&data->philo[index].philo) != 0)
-            fprintf(stderr, "Failed to destroy philo mutex\n");
-        if (pthread_mutex_destroy(&data->philo[index].l_fork) != 0)
-            fprintf(stderr, "Failed to destroy left fork mutex\n");
-    }
-    if (pthread_mutex_destroy(&data->table) != 0)
-        fprintf(stderr, "Failed to destroy table mutex\n");
-    if (pthread_mutex_destroy(&data->write) != 0)
-        fprintf(stderr, "Failed to destroy write mutex\n");
-    if (data->philo)
-    {
-        free(data->philo);
-        data->philo = NULL;
-    }
-    exit(exit_statut);
-}
 
 void	*s_malloc(t_data *data, size_t size)
 {
@@ -242,7 +243,7 @@ void	t_usleep(long usec, t_data *data)
 
 void	wait_threads(t_data *data)
 {
-	while (!get_bool(data, &data->table, &data->b_ready))
+	while (!get_bool(data, data->table, &data->b_ready))
 		;
 }
 
@@ -279,7 +280,7 @@ void	print_statut(t_statut code, t_data *data, t_philo *philo,
 	elapsed = get_time(data, MILLISECOND) - philo->data->t_simulation;
 	if (philo->dead)
 		return ;
-	mutex_handler(data, &data->write, M_LOCK);
+	mutex_handler(data, data->write, M_LOCK);
 	if (!subject_print)
 		debug_print(data, code, philo, elapsed);
 	else
@@ -297,13 +298,13 @@ void	print_statut(t_statut code, t_data *data, t_philo *philo,
 	else
 		printf("WRONG CODE\n");
 	printf("\033[0m");
-	mutex_handler(data, &data->write, M_UNLOCK);
+	mutex_handler(data, data->write, M_UNLOCK);
 }
 void					increase_long(t_data *data, mtx *mutex, long *value);
 
-void					set_long(t_data *data, mtx mutex, long *dest,
+void					set_long(t_data *data, mtx *mutex, long *dest,
 							long value);
-void					set_bool(t_data *data, mtx mutex, bool *dest,
+void					set_bool(t_data *data, mtx *mutex, bool *dest,
 							bool value);
 bool					get_long(t_data *data, mtx *mutex, long *value);
 
@@ -311,16 +312,16 @@ void	eat(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
-		mutex_handler(philo->data, &philo->l_fork, M_LOCK);
+		mutex_handler(philo->data, philo->l_fork, M_LOCK);
 		print_statut(L_FORK, philo->data, philo, true);
-		mutex_handler(philo->data, philo->r_fork, M_LOCK);
+		mutex_handler(philo->data, *philo->r_fork, M_LOCK);
 		print_statut(R_FORK, philo->data, philo, true);
 	}
 	else
 	{
-		mutex_handler(philo->data, philo->r_fork, M_LOCK);
+		mutex_handler(philo->data, *philo->r_fork, M_LOCK);
 		print_statut(R_FORK, philo->data, philo, true);
-		mutex_handler(philo->data, &philo->l_fork, M_LOCK);
+		mutex_handler(philo->data, philo->l_fork, M_LOCK);
 		print_statut(L_FORK, philo->data, philo, true);
 	}
 	print_statut(EAT, philo->data, philo, true);
@@ -328,16 +329,8 @@ void	eat(t_philo *philo)
 	philo->n_meal++;
 	if (philo->data->n_meal > 0 && philo->n_meal == philo->data->n_meal)
 		set_bool(philo->data, philo->philo, &philo->dead, true);
-	if (philo->id % 2 == 0)
-	{
-		mutex_handler(philo->data, &philo->l_fork, M_UNLOCK);
-		mutex_handler(philo->data, philo->r_fork, M_UNLOCK);
-	}
-	else
-	{
-		mutex_handler(philo->data, philo->r_fork, M_UNLOCK);
-		mutex_handler(philo->data, &philo->l_fork, M_UNLOCK);
-	}
+	mutex_handler(philo->data, philo->l_fork, M_UNLOCK);
+	mutex_handler(philo->data, *philo->r_fork, M_UNLOCK);
 }
 
 void	thinking(t_philo *philo)
@@ -353,7 +346,7 @@ void	*routine(void *data)
 	wait_threads(philo->data);
 	set_long(philo->data, philo->philo, &philo->t_meal, get_time(philo->data,
 			MILLISECOND));
-	increase_long(philo->data, &philo->data->table, &philo->data->n_threads);
+	increase_long(philo->data, philo->data->table, &philo->data->n_threads);
 	while (!end(data))
 	{
 		//! eat
@@ -372,17 +365,17 @@ bool	all_threads_running(t_data *data)
 	bool	ret;
 
 	ret = false;
-	mutex_handler(data, &data->table, M_LOCK);
+	mutex_handler(data, data->table, M_LOCK);
 	if (data->n_threads == data->n_philo)
 		ret = true;
-	mutex_handler(data, &data->table, M_UNLOCK);
+	mutex_handler(data, data->table, M_UNLOCK);
 	return (ret);
 }
 
 void	increase_long(t_data *data, mtx *mutex, long *value)
 {
 	mutex_handler(data, mutex, M_LOCK);
-	value++;
+	(*value)++;
 	mutex_handler(data, mutex, M_UNLOCK);
 }
 
@@ -391,10 +384,10 @@ static bool	philo_died(t_philo *philo)
 	long	elapsed;
 	long	t_to_die;
 
-	if (get_bool(philo->data, &philo->philo, &philo->dead))
+	if (get_bool(philo->data, philo->philo, &philo->dead))
 		return (false);
 	elapsed = get_time(philo->data, MILLISECOND) - get_long(philo->data,
-			&philo->philo, &philo->t_meal);
+			philo->philo, &philo->t_meal);
 	t_to_die = philo->data->t_die / 1e3;
 	if (elapsed > t_to_die)
 		return (true);
@@ -403,21 +396,23 @@ static bool	philo_died(t_philo *philo)
 
 void	*monitor_routine(void *in_data)
 {
-	t_data	*data;
+	t_philo	*philo;
 	long	index;
 
 	index = -1;
-	data = (t_data *)in_data;
-	while (!all_threads_running(data))
+	philo = (t_philo *)in_data;
+	while (!all_threads_running(philo->data))
 		;
-	while (!end(data))
+	while (!end(philo->data))
 	{
-		while (++index < data->n_philo)
+		while (++index < philo->data->n_philo)
 		{
-			if (philo_died(&data->philo[index]))
+			if (philo_died(&philo->data->philo[index]))
 			{
-				set_bool(data, data->table, &data->b_end, true);
-				print_statut(DEAD, data, &data->philo[index], true);
+				set_bool(philo->data, philo->data->table, &philo->data->b_end,
+					true);
+				print_statut(DEAD, philo->data, &philo->data->philo[index],
+					true);
 			}
 		}
 	}
@@ -437,45 +432,57 @@ void	thread_handler(t_data *data, t_philo *philo, pthread_t *monitor_thread,
 		else if (code == T_JOIN)
 			ret_check = pthread_join(philo->thread, NULL);
 		else
-			ret_check = printf("wrong code for handling threads [test]\n");
+			ret_check = printf("wrong code for handling threads [philo threads] ");
 	}
 	else if (monitor_thread && !philo)
 	{
-		if (code == T_CREATE)
-			ret_check = pthread_create(monitor_thread, NULL, monitor_routine,
+		if (code == T_MONITOR_CREATE)
+			ret_check = pthread_create(&data->monitor, NULL, monitor_routine,
 					data);
 		else if (code == T_JOIN)
-			ret_check = pthread_join(*monitor_thread, NULL);
+			ret_check = pthread_join(data->monitor, NULL);
 		else
-			ret_check = printf("wrong code for handling threads [test]\n");
+			ret_check = printf("wrong code for handling threads [monitor] ");
 	}
 	if (ret_check != 0)
+	{
+		printf("[return (code : %ld]\n", ret_check);
 		s_exit(data, EXIT_FAILURE);
+	}
 }
 
-void mutex_handler(t_data *data, mtx *mutex, t_thread code)
+void	mutex_handler(t_data *data, mtx *mutex, t_thread code)
 {
-    int ret_check = 0;
+	int	ret_check;
 
-    if (code == M_INIT)
-        ret_check = pthread_mutex_init(mutex, NULL);
-    else if (code == M_LOCK)
-        ret_check = pthread_mutex_lock(mutex);
-    else if (code == M_UNLOCK)
-        ret_check = pthread_mutex_unlock(mutex);
-    else if (code == M_DESTROY)
-    {
-        printf("Attempting to destroy mutex at address: %p\n", (void*)mutex);
-        ret_check = pthread_mutex_destroy(mutex);
-    }
-    else
-        ret_check = printf("wrong code for handling mutex\n");
-
-    if (ret_check != 0)
-    {
-        printf("[%d] Mutex operation failed at %p\n", ret_check, (void*)mutex);
-        s_exit(data, EXIT_FAILURE); // Ensure to handle cleanup gracefully
-    }
+	ret_check = 0;
+	if (code == M_INIT)
+	{
+		// *mutex = (mtx)PTHREAD_MUTEX_INITIALIZER;
+		ret_check = pthread_mutex_init(mutex, NULL);
+	}
+	else if (code == M_LOCK)
+	{
+		ret_check = pthread_mutex_lock(mutex);
+		printf("MLOCK\n");
+	}
+	else if (code == M_UNLOCK)
+	{
+		ret_check = pthread_mutex_unlock(mutex);
+		printf("MUNLOCK\n");
+	}
+	else if (code == M_DESTROY)
+	{
+		printf("Attempting to destroy mutex at address: %p\n", (void *)mutex);
+		ret_check = pthread_mutex_destroy(mutex);
+	}
+	else
+		ret_check = printf("wrong code for handling mutex\n");
+	if (ret_check != 0)
+	{
+		printf("[%d] Mutex operation failed at %p\n", ret_check, (void *)mutex);
+		s_exit(data, EXIT_FAILURE); // Ensure to handle cleanup gracefully
+	}
 }
 
 void	fork_giver(t_data *data)
@@ -485,6 +492,7 @@ void	fork_giver(t_data *data)
 	index = -1;
 	while (++index < data->n_philo)
 	{
+		printf("%ld - %ld[[]]\n", index, (index + 1) % (data->n_philo));
 		data->philo[index].r_fork = &data->philo[(index + 1)
 			% data->n_philo].l_fork;
 	}
@@ -496,6 +504,12 @@ void	philos_knowledge(t_data *data)
 	long	pos;
 
 	index = -1;
+	data->n_threads = 0;
+	data->philo = s_malloc(data, data->n_philo * sizeof(t_philo));
+	data->table = s_malloc(data, sizeof(mtx));
+	data->write = s_malloc(data, sizeof(mtx));
+	mutex_handler(data, data->table, M_INIT);
+	mutex_handler(data, data->write, M_INIT);
 	while (++index < data->n_philo)
 	{
 		data->philo[index].id = index;
@@ -503,17 +517,19 @@ void	philos_knowledge(t_data *data)
 		data->philo[index].n_meal = 0;
 		data->philo[index].dead = false;
 		data->philo[index].data = data;
-		mutex_handler(data, &data->philo[index].philo, M_INIT);
-		mutex_handler(data, &data->philo[index].l_fork, M_INIT);
+		data->philo[index].philo = s_malloc(data, sizeof(mtx));
+		data->philo[index].l_fork = s_malloc(data, sizeof(mtx));
+		mutex_handler(data, data->philo[index].philo, M_INIT);
+		mutex_handler(data, data->philo[index].l_fork, M_INIT);
 	}
 	fork_giver(data);
 }
 
-void	set_bool(t_data *data, mtx mutex, bool *dest, bool value)
+void	set_bool(t_data *data, mtx *mutex, bool *dest, bool value)
 {
-	mutex_handler(data, &mutex, M_LOCK);
+	mutex_handler(data, mutex, M_LOCK);
 	*dest = value;
-	mutex_handler(data, &mutex, M_UNLOCK);
+	mutex_handler(data, mutex, M_UNLOCK);
 }
 
 bool	get_bool(t_data *data, mtx *mutex, bool *value)
@@ -526,11 +542,11 @@ bool	get_bool(t_data *data, mtx *mutex, bool *value)
 	return (ret);
 }
 
-void	set_long(t_data *data, mtx mutex, long *dest, long value)
+void	set_long(t_data *data, mtx *mutex, long *dest, long value)
 {
-	mutex_handler(data, &mutex, M_LOCK);
+	mutex_handler(data, mutex, M_LOCK);
 	*dest = value;
-	mutex_handler(data, &mutex, M_UNLOCK);
+	mutex_handler(data, mutex, M_UNLOCK);
 }
 
 bool	get_long(t_data *data, mtx *mutex, long *value)
@@ -545,7 +561,7 @@ bool	get_long(t_data *data, mtx *mutex, long *value)
 
 bool	end(t_data *data)
 {
-	return (get_bool(data, &data->table, &data->b_end));
+	return (get_bool(data, data->table, &data->b_end));
 }
 
 bool	setup(t_data *data, char **argv)
@@ -555,11 +571,8 @@ bool	setup(t_data *data, char **argv)
 		&& ft_atoi(argv[2], &data->t_eat) && ft_atoi(argv[3], &data->t_sleep))
 		return (data->t_die *= 1e3, data->t_eat *= 1e3, data->t_sleep *= 1e3,
 			ft_atoi(argv[4], &data->n_meal), data->b_ready = false,
-			data->b_end = false, mutex_handler(data, &data->table, M_INIT),
-			mutex_handler(data, &data->write, M_INIT),
-			data->philo = s_malloc(data, data->n_philo * sizeof(t_philo)),
-			philos_knowledge(data), print_data(data), (data->t_die < 6e3
-				&& data->t_eat < 6e3 && data->t_sleep < 6e3));
+			data->b_end = false,  philos_knowledge(data), print_data(data),
+			(data->t_die < 6e3 && data->t_eat < 6e3 && data->t_sleep < 6e3));
 	return (true);
 }
 
@@ -571,7 +584,7 @@ void	*lone_philo(void *data)
 	wait_threads(philo->data);
 	set_long(philo->data, philo->philo, &philo->t_meal, get_time(philo->data,
 			MILLISECOND));
-	increase_long(philo->data, &philo->data->table, &philo->data->n_threads);
+	increase_long(philo->data, philo->data->table, &philo->data->n_threads);
 	print_statut(L_FORK, philo->data, philo, true);
 	while (!end(philo->data))
 		t_usleep(200, philo->data);
@@ -583,20 +596,24 @@ void	simulation(t_data *data)
 	long	index;
 
 	printf("Starting simulation...\n");
+	data->t_simulation = get_time(data, MILLISECOND);
 	if (!data->philo)
 		s_exit(data, EXIT_FAILURE);
 	else if (data->n_philo == 1)
 		thread_handler(data, &data->philo[0], NULL, T_CREATE);
-	index = -1;
-	while (++index < data->n_philo)
-		thread_handler(data, &data->philo[index], NULL, T_CREATE);
-	thread_handler(data, NULL, &data->monitor, T_CREATE),
-		data->t_simulation = get_time(data, MILLISECOND);
-	set_bool(data, data->table, &data->b_ready, true);
-	index = -1;
-	while (++index < data->n_philo)
-		thread_handler(data, &data->philo[index], NULL, T_JOIN);
-	thread_handler(data, NULL, &data->monitor, T_JOIN);
+	else
+	{
+		index = -1;
+		while (++index < data->n_philo)
+			thread_handler(data, &data->philo[index], NULL, T_CREATE);
+		thread_handler(data, NULL, &data->monitor, T_MONITOR_CREATE);
+		set_bool(data, data->table, &data->b_ready, true);
+		index = -1;
+		while (++index < data->n_philo)
+			thread_handler(data, &data->philo[index], NULL, T_JOIN);
+		thread_handler(data, NULL, &data->monitor, T_JOIN);
+		
+	}
 	printf("\n\nSimulation completed.\n");
 }
 
