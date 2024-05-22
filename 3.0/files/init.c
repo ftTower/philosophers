@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/21 02:54:02 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/22 02:31:30 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	data_null(t_data *data)
 	data->lifetime.t_die = 0;
 	data->lifetime.t_eat = 0;
 	data->lifetime.t_sleep = 0;
+	data->sync.t_simulation = 0;
 	data->sync.n_threads = 0;
 	data->forks = NULL;
 	data->philos = NULL;
@@ -38,21 +39,24 @@ void	data_link(t_data *data)
 	long	index;
 
 	index = -1;
+	data->sync.end = false;
+	data->sync.all_ready = false;
 	while (++index < data->lifetime.n_philo)
 	{
 		data->philos[index].first_fork = data->forks[(index + 1)
 			% data->lifetime.n_philo];
-		data->philos[index].second_fork = data->forks[index];
+		data->philos[index].second_fork = &data->forks[index];
 		if (index % 2 == 0)
 		{
 			data->philos[index].first_fork = data->forks[index];
-			data->philos[index].second_fork = data->forks[(index + 1)
+			data->philos[index].second_fork = &data->forks[(index + 1)
 				% data->lifetime.n_philo];
 		}
 		data->philos[index].lifetime = data->lifetime;
 		data->sync.ready[index] = false;
 		data->philos[index].sync = &data->sync;
 		data->philos[index].statut.n_meal = 0;
+		data->philos[index].statut.t_meal = 0;
 		data->philos[index].statut.statut = UNASSIGNED;
 	}
 }
@@ -67,6 +71,9 @@ bool	data_memory(t_data *data)
 	if (!data->philos || !data->forks || !data->sync.ready)
 		return (data_free(data), terror("data_memory", "malloc failed"), true);
 	index = -1;
+	if (pthread_mutex_init(&data->sync.mutex, NULL) != 0)
+		return (data_free(data),terror("data_memory", "error initing sync mutex"),true);
+	
 	while (++index < data->lifetime.n_philo)
 	{
 		data->forks[index].id = index;

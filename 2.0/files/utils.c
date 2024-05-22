@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:13:10 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/20 01:54:03 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/21 22:09:24 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,7 @@ bool	ft_atoi(const char *str, long *out_value)
 	return (*out_value = value * sign, true);
 }
 
-long	get_time(t_data *data, t_metric code)
-{
-	struct timeval	tv;
 
-	if (gettimeofday(&tv, NULL))
-		s_exit(data, EXIT_FAILURE);
-	else if (code == SECOND)
-		return (tv.tv_sec + (tv.tv_usec / 1e6));
-	else if (code == MILLISECOND)
-		return ((tv.tv_sec * 1e3) + (tv.tv_usec / 1e3));
-	else if (code == MICROSECOND)
-		return ((tv.tv_sec * 1e6) + tv.tv_usec);
-	return (s_exit(data, EXIT_FAILURE), -1);
-}
 
 #include <unistd.h>
 

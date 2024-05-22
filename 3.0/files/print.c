@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:47:19 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/21 03:00:51 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/22 02:25:24 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,13 @@ void	loading(bool *ready, long size)
 	long index;
 
 	index = -1;
-	printf("\033c");
 	if (!ready)
 		return ;
+	if (DISPLAY_MODE)
+	{
+		usleep(10000);
+		printf("\033c");
+	}
 	while(++index < size)
 	{
 		if (index % 10 == 0)
@@ -64,9 +68,11 @@ void	p_philos(t_philo *philo)
 		printf("lifetime : [%ld|%ld] : [%ldms|%ldms|%ldms]\n",
 			phi.lifetime.n_philo, phi.lifetime.max_meal, phi.lifetime.t_die,
 			phi.lifetime.t_eat, phi.lifetime.t_sleep);
-		printf("syncro   : [%ld]\n", phi.sync->n_threads);
+		printf("lifedata : [t_spawn : %ld]\n", phi.statut.t_spawn);
+		printf("end      : [%d]\n", phi.sync->end);
+		printf("syncro   : [n_thread : %ld] [t_simu :%ldms]\n", phi.sync->n_threads, phi.sync->t_simulation);
 		printf("forks    : [first fork %ld] - [second fork %ld]\n",
-			phi.first_fork.id, phi.second_fork.id);
+			phi.first_fork.id, phi.second_fork->id);
 		if (phi.statut.statut == UNASSIGNED)
 			printf("UNASSIGNED\n");
 		else
