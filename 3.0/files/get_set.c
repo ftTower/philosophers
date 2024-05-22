@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 23:19:48 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/22 01:40:16 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/22 23:30:54 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@ bool	get_bool(pthread_mutex_t mutex, bool to_get)
 	ret = to_get;
 	pthread_mutex_unlock(&mutex);
 	return (ret); 
+}
+
+void	set_statut(t_philo *philo, t_statut_code code)
+{
+	pthread_mutex_lock(&philo->mutex);
+	if (code == L_FORK)
+		
+	pthread_mutex_unlock(&philo->mutex);
 }
 
 void	increase_long(pthread_mutex_t mutex, long *to_set)
