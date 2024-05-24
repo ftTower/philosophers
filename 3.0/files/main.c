@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 23:13:42 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/23 01:07:40 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/25 01:22:06 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,35 @@ void	print_lock(pthread_mutex_t mutex, t_philo *phi, t_statut_code code)
 
 void	eat(t_philo *philo)
 {
-	if (pthread_mutex_lock(&philo->first_fork.mutex) != 0)
-		return ;
-	print_lock(philo->sync->write_mutex, philo, L_FORK);
-	if (pthread_mutex_lock(&philo->second_fork->mutex) != 0)
-		return ;
-	print_lock(philo->sync->write_mutex, philo, R_FORK);
+    pthread_mutex_t *first_fork_mutex;
+    pthread_mutex_t *second_fork_mutex;
+
+    if (philo->id % 2 == 0) {
+        first_fork_mutex = &philo->first_fork.mutex;
+        second_fork_mutex = &philo->second_fork->mutex;
+    } else {
+        first_fork_mutex = &philo->second_fork->mutex;
+        second_fork_mutex = &philo->first_fork.mutex;
+    }
+    // Verrouiller les fourchettes dans le bon ordre
+    pthread_mutex_lock(first_fork_mutex);
+    print_lock(philo->sync->write_mutex, philo, L_FORK);
+    pthread_mutex_lock(second_fork_mutex);
+    print_lock(philo->sync->write_mutex, philo, R_FORK);
+	// if (philo->id % 2 == 0)
+	// {
+	// 	pthread_mutex_lock(&philo->first_fork.mutex);
+	// 	print_lock(philo->sync->write_mutex, philo, L_FORK);
+	// 	pthread_mutex_lock(&philo->second_fork->mutex);
+	// 	print_lock(philo->sync->write_mutex, philo, R_FORK);
+	// }
+	// else
+	// {
+	// 	pthread_mutex_lock(&philo->second_fork->mutex);
+	// 	print_lock(philo->sync->write_mutex, philo, R_FORK);		
+	// 	pthread_mutex_lock(&philo->first_fork.mutex);
+	// 	print_lock(philo->sync->write_mutex, philo, L_FORK);
+	// }
 	print_lock(philo->sync->write_mutex, philo, EAT);
 	usleep(philo->lifetime.t_eat);
 	pthread_mutex_unlock(&philo->first_fork.mutex);
@@ -59,10 +82,10 @@ void	eat(t_philo *philo)
 
 void	life(t_philo *philo)
 {
+	print_lock(philo->sync->write_mutex, philo, THINK);
 	eat(philo);
 	print_lock(philo->sync->write_mutex, philo, SLEEP);
 	usleep(philo->lifetime.t_sleep);
-	print_lock(philo->sync->write_mutex, philo, THINK);
 }
 
 void	*philo_life(void *in_philo)
@@ -75,6 +98,8 @@ void	*philo_life(void *in_philo)
 	while (!get_bool(philo->sync->mutex, philo->sync->all_ready))
 		;
 	philo->statut.t_spawn = get_time(MILLISECOND);
+	if (philo->id % 2 == 0)
+		usleep(philo->lifetime.t_eat);
 	while (!get_bool(philo->sync->mutex, philo->sync->end))
 		life(philo);
 	return (NULL);
@@ -90,9 +115,8 @@ bool	simulation(t_data *data)
 		if (pthread_create(&data->philos[index].thread, NULL, philo_life,
 				&data->philos[index]) != 0)
 			return (true);
-		loading(data->sync.ready, data->lifetime.n_philo);
+		// loading(data->sync.ready, data->lifetime.n_philo);
 	}
-	// usleep(50);
 	data->sync.t_simulation = get_time(MILLISECOND);
 	set_bool(data->sync.mutex, &data->sync.all_ready, true);
 	index = -1;

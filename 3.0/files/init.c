@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/23 01:09:37 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/25 01:12:05 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ void	data_link(t_data *data)
 		data->philos[index].first_fork = data->forks[index];
 		data->philos[index].second_fork = &data->forks[(index + 1)
 			% data->lifetime.n_philo];
-		if (index % 2 == 0)
-		{
-			data->philos[index].first_fork = data->forks[(index + 1)
-				% data->lifetime.n_philo];
-			data->philos[index].second_fork = &data->forks[index];
-		}
+		// if (index % 2 == 0)
+		// {
+		// 	data->philos[index].first_fork = data->forks[(index + 1)
+		// 		% data->lifetime.n_philo];
+		// 	data->philos[index].second_fork = &data->forks[index];
+		// }
 		data->philos[index].lifetime = data->lifetime;
 		data->sync.ready[index] = false;
 		data->philos[index].sync = &data->sync;
