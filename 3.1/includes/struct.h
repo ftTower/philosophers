@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:17 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/26 01:44:33 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/27 00:42:55 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_memory
 typedef struct s_info
 {
 	long t_spawn;
+	long n_meal;
 	bool rdy_to_eat;
 }	t_info;
 
@@ -89,9 +90,10 @@ typedef struct s_monitor
 {
 	t_philo 		*philos;
 	t_param			param;
-	t_memory		watch;
 	t_sync			*sync;
 	pthread_t		thread;
+	long			median_meal;
+	t_statut		*all_status;
 }					t_monitor;
 
 typedef struct s_data

@@ -6,11 +6,29 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 23:19:48 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/26 01:31:14 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/27 01:03:40 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <all.h>
+
+void	increase_long(pthread_mutex_t mutex, long *src)
+{
+	pthread_mutex_lock(&mutex);
+	(*src)++;
+	pthread_mutex_unlock(&mutex);
+}
+
+long	get_long(pthread_mutex_t mutex, long src)
+{
+	long value;
+
+	value = 0;
+	pthread_mutex_lock(&mutex);
+	value = src;
+	pthread_mutex_unlock(&mutex);
+	return (value);
+}
 
 t_statut	get_statut(t_philo *philo)
 {

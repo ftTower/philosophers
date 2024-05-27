@@ -6,7 +6,7 @@
 #    By: tauer <tauer@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 17:59:50 by tauer             #+#    #+#              #
-#    Updated: 2024/05/25 23:47:10 by tauer            ###   ########.fr        #
+#    Updated: 2024/05/26 23:50:46 by tauer            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/print.c \
 				$(SRC_DIR)/printer.c \
 				$(SRC_DIR)/get_set.c \
+				$(SRC_DIR)/monitor.c \
 			
 CC			=	cc 
 

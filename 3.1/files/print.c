@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:47:19 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/26 00:59:55 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/27 01:07:17 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	debug_philos(t_philo *philos, long size)
 		t_putstr(BG_GREEN, " NEXT", true);
 		t_putstr(WHITE, "| tspawn : ", false);
 		t_putnbr(YELLOW, philos[index].info.t_spawn, true);
+		t_putstr(WHITE, "| n meal : ", false);
+		t_putnbr(BLUE, philos[index].info.n_meal, true);
 	}
 	t_putstr(MAGENTA, "+=============================================\n", false);
 }
