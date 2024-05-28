@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/25 01:12:05 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/29 00:01:23 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,27 +71,7 @@ bool	data_memory(t_data *data)
 	if (!data->philos || !data->forks || !data->sync.ready)
 		return (data_free(data), terror("data_memory", "malloc failed"), true);
 	index = -1;
-	if (pthread_mutex_init(&data->sync.write_mutex, NULL) != 0)
-		return (data_free(data), terror("data_memory",
-				"error initing sync write mutex"), true);
-	if (pthread_mutex_init(&data->sync.mutex, NULL) != 0)
-		return (data_free(data), terror("data_memory",
-				"error initing sync mutex"), true);
-	while (++index < data->lifetime.n_philo)
-	{
-		data->forks[index].id = index;
-		data->philos[index].id = index;
-		if (pthread_mutex_init(&data->philos[index].mutex, NULL) == -1)
-			return (terror("data_memory", "error initing a philo mutex"),
-				data_free(data), true);
-		else if (pthread_mutex_init(&data->philos[index].statut.mutex, NULL) ==
-			-1)
-			return (terror("data_memory", "error initing a philo.statut mutex"),
-				data_free(data), true);
-		else if (pthread_mutex_init(&data->forks[index].mutex, NULL) == -1)
-			return (terror("data_memory", "error initing a fork mutex"),
-				data_free(data), true);
-	}
+	
 	return (data_link(data), false);
 }
 

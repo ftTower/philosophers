@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/28 01:45:13 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/29 00:58:11 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	monitor_maker(t_data *data, t_param template)
 	while (++index < template.n_philo)
 		data->monitor.all_status[index] = UNSET;
 	data->monitor.param = template;
-	data->monitor.sync = &data->sync;
+	data->monitor.sync = data->philos->sync;
 	data->monitor.philos = data->philos;
 	return (false);
 }
@@ -61,8 +61,8 @@ bool	philos_maker(t_data *data, t_param template)
 		data->philos[index].info.n_meal = 0;
 		data->philos[index].info.dead = false;
 		data->philos[index].info.t_lastmeal = 0;
-		if (pthread_mutex_init(&data->philos[index].utils.mutex, NULL) != 0)
-			return (free(data->philos), printf("failed to init mutex\n"), true);
+		// if (pthread_mutex_init(&data->philos[index].utils.mutex, NULL) != 0)
+		// 	return (free(data->philos), printf("failed to init mutex\n"), true);
 	}
 	return (false);
 }
@@ -73,9 +73,8 @@ bool	init_data(t_data *data, char **argv)
 
 	data->sync.all_ready = false;
 	data->sync.end = false;
-	if (pthread_mutex_init(&data->sync.mutex, NULL) != 0
-		|| param_getter(&template, argv) || philos_maker(data, template)
+	if ( param_getter(&template, argv) || philos_maker(data, template)
 		|| monitor_maker(data, template))
 		return (printf("failed to init data\n"), true);
-	return (false);
+	return (printf("init ok\n"),false);
 }

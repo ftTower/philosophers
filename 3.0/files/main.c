@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 23:13:42 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/25 01:22:06 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/29 00:02:40 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,31 @@ bool	simulation(t_data *data)
 int	main(int argc, char **argv)
 {
 	t_data	data;
+	long index = -1;
 
 	if (data_init(&data, argc, argv + 1))
 		return (EXIT_FAILURE);
+	if (pthread_mutex_init(&data.sync.write_mutex, NULL) != 0)
+		return (data_free(&data), terror("data_memory",
+				"error initing sync write mutex"), true);
+	if (pthread_mutex_init(&data.sync.mutex, NULL) != 0)
+		return (data_free(&data), terror("data_memory",
+				"error initing sync mutex"), true);
+	while (++index < data.lifetime.n_philo)
+	{
+		data.forks[index].id = index;
+		data.philos[index].id = index;
+		if (pthread_mutex_init(&data.philos[index].mutex, NULL) == -1)
+			return (terror("data_memory", "error initing a philo mutex"),
+				data_free(&data), true);
+		else if (pthread_mutex_init(&data.philos[index].statut.mutex, NULL) ==
+			-1)
+			return (terror("data_memory", "error initing a philo.statut mutex"),
+				data_free(&data), true);
+		else if (pthread_mutex_init(&data.forks[index].mutex, NULL) == -1)
+			return (terror("data_memory", "error initing a fork mutex"),
+				data_free(&data), true);
+	}
 	if (simulation(&data))
 		return (EXIT_FAILURE);
 	return (p_lifetime(data.lifetime), p_philos(data.philos), data_free(&data),
