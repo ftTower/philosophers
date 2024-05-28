@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/27 01:48:02 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/28 01:45:13 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ bool	param_getter(t_param *template, char **argv)
 
 bool	monitor_maker(t_data *data, t_param template)
 {
-	long index;
+	long	index;
 
 	data->monitor.all_status = malloc(sizeof(t_statut) * template.n_philo);
 	if (!data->monitor.all_status)
-		return (free(data->philos),true);
+		return (free(data->philos), true);
 	index = -1;
-	while(++index < template.n_philo)
+	while (++index < template.n_philo)
 		data->monitor.all_status[index] = UNSET;
 	data->monitor.param = template;
-	data->monitor.sync = &data->sync; 
+	data->monitor.sync = &data->sync;
 	data->monitor.philos = data->philos;
 	return (false);
 }
@@ -59,6 +59,8 @@ bool	philos_maker(t_data *data, t_param template)
 		data->philos[index].sync = &data->sync;
 		data->philos[index].utils.statut = UNSET;
 		data->philos[index].info.n_meal = 0;
+		data->philos[index].info.dead = false;
+		data->philos[index].info.t_lastmeal = 0;
 		if (pthread_mutex_init(&data->philos[index].utils.mutex, NULL) != 0)
 			return (free(data->philos), printf("failed to init mutex\n"), true);
 	}
@@ -71,9 +73,9 @@ bool	init_data(t_data *data, char **argv)
 
 	data->sync.all_ready = false;
 	data->sync.end = false;
-	data->monitor.median_meal = 0;
 	if (pthread_mutex_init(&data->sync.mutex, NULL) != 0
-		|| param_getter(&template, argv) || philos_maker(data, template) || monitor_maker(data, template))
+		|| param_getter(&template, argv) || philos_maker(data, template)
+		|| monitor_maker(data, template))
 		return (printf("failed to init data\n"), true);
 	return (false);
 }

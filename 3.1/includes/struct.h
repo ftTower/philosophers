@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:17 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/27 00:42:55 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/28 00:54:43 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef enum e_statut
 
 typedef struct s_sync
 {
-	// t_statut		*table_info;
 	bool			all_ready;
 	bool			end;
 	long			t_start;
@@ -73,8 +72,10 @@ typedef struct s_memory
 typedef struct s_info
 {
 	long t_spawn;
+	long t_lastmeal;
 	long n_meal;
 	bool rdy_to_eat;
+	bool dead;
 }	t_info;
 
 typedef struct s_philo
@@ -91,9 +92,8 @@ typedef struct s_monitor
 	t_philo 		*philos;
 	t_param			param;
 	t_sync			*sync;
-	pthread_t		thread;
-	long			median_meal;
 	t_statut		*all_status;
+	pthread_t		thread;
 }					t_monitor;
 
 typedef struct s_data
@@ -102,9 +102,5 @@ typedef struct s_data
 	t_monitor		monitor;
 	t_sync 			sync;
 }					t_data;
-
-// typedef struct s_lifetime
-// {
-// }					t_lifetime;
 
 #endif

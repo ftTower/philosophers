@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 23:38:30 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/26 00:03:04 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/28 00:30:14 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	t_putstr(t_color color, const char *str, bool lignfeed)
 		printf("\n");
 }
 
-void	t_putnbr(t_color color, long value, bool lignfeed)
+void	t_putnbr(t_color color, long value, bool lignfeed, bool format)
 {
 	const char *colors[] = {
 		"\033[38;5;196m",
@@ -45,7 +45,10 @@ void	t_putnbr(t_color color, long value, bool lignfeed)
 		"\033[48;5;46m",
 		"\033[48;5;196m",
 	};
-	printf("%s%-5ld\033[0m", colors[color], value);
+	if (format)
+		printf("%s%-5ld\033[0m", colors[color], value);
+	else
+		printf("%s%-3ld\033[0m", colors[color], value);
 	if (lignfeed)
 		printf("\n");
 }

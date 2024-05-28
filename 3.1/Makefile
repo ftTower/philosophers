@@ -6,7 +6,7 @@
 #    By: tauer <tauer@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 17:59:50 by tauer             #+#    #+#              #
-#    Updated: 2024/05/26 23:50:46 by tauer            ###   ########.fr        #
+#    Updated: 2024/05/27 23:40:49 by tauer            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/printer.c \
 				$(SRC_DIR)/get_set.c \
 				$(SRC_DIR)/monitor.c \
+				$(SRC_DIR)/philos.c \
 			
 CC			=	cc 
 
@@ -42,12 +43,12 @@ $(NAME):$(OBJ)
 
 clear :
 	@clear
-	@echo "42Paris : $(NAME)"
+	@echo "42 - PARIS : $(NAME)"
 	@echo ""
 
 clean : clear
 	@rm -rf build/
-	@echo "Clean   : *.o in build !"
+	@echo "Clean   : ./$(BUILD_DIR) !"
 
 fclean : clean
 	@rm -f $(NAME)

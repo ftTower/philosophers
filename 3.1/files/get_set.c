@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 23:19:48 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/27 01:03:40 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/28 01:31:13 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ long	get_long(pthread_mutex_t mutex, long src)
 	value = src;
 	pthread_mutex_unlock(&mutex);
 	return (value);
+}
+void	set_long(pthread_mutex_t mutex, long *dst, long src)
+{
+	pthread_mutex_lock(&mutex);
+	*dst = src;
+	pthread_mutex_unlock(&mutex);
 }
 
 t_statut	get_statut(t_philo *philo)

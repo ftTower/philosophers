@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:47:19 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/27 01:07:17 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/27 23:54:53 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	debug_philos(t_philo *philos, long size)
 	{
 		t_putstr(MAGENTA, "+========================[", false);
 		t_putstr(BLUE, "philo : ", false);
-		t_putnbr(CYAN, philos[index].id, false);
+		t_putnbr(CYAN, philos[index].id, false, true);
 		t_putstr(MAGENTA, "]======", true);
 		t_putstr(WHITE, "| param  : ", false);
 		if (philos[index].param.n_philo != 0 && philos[index].param.t_die != 0
@@ -48,16 +48,16 @@ void	debug_philos(t_philo *philos, long size)
 			t_putstr(RED, "UNSET", true);
 		t_putstr(WHITE, "| utils  : ", false);
 		t_putstr(BG_RED, "PREV ", false);
-		t_putnbr(BG_RED, philos[index].utils.prev_pos, false);
+		t_putnbr(BG_RED, philos[index].utils.prev_pos, false, true);
 		t_putstr(WHITE, " ", false);
-		t_putnbr(BG_WHITE, philos[index].id, false);
+		t_putnbr(BG_WHITE, philos[index].id, false, true);
 		t_putstr(WHITE, " ", false);
-		t_putnbr(BG_GREEN, philos[index].utils.next_pos, false);
+		t_putnbr(BG_GREEN, philos[index].utils.next_pos, false, true);
 		t_putstr(BG_GREEN, " NEXT", true);
 		t_putstr(WHITE, "| tspawn : ", false);
-		t_putnbr(YELLOW, philos[index].info.t_spawn, true);
+		t_putnbr(YELLOW, philos[index].info.t_spawn, true, true);
 		t_putstr(WHITE, "| n meal : ", false);
-		t_putnbr(BLUE, philos[index].info.n_meal, true);
+		t_putnbr(BLUE, philos[index].info.n_meal, true, true);
 	}
 	t_putstr(MAGENTA, "+=============================================\n", false);
 }
