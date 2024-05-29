@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/29 00:58:11 by tauer            ###   ########.fr       */
+/*   Updated: 2024/05/29 21:25:38 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ bool	init_data(t_data *data, char **argv)
 
 	data->sync.all_ready = false;
 	data->sync.end = false;
-	if ( param_getter(&template, argv) || philos_maker(data, template)
+	if (param_getter(&template, argv) || philos_maker(data, template)
 		|| monitor_maker(data, template))
 		return (printf("failed to init data\n"), true);
 	return (printf("init ok\n"),false);
