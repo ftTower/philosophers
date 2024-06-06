@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:17 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/28 00:54:43 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/06 00:07:24 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_info
 	long n_meal;
 	bool rdy_to_eat;
 	bool dead;
+	pthread_mutex_t mutex;
 }	t_info;
 
 typedef struct s_philo
