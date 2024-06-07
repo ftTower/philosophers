@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 23:19:48 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/06 00:05:15 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/07 18:07:32 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void	increase_long(pthread_mutex_t *mutex, long *src)
 	pthread_mutex_unlock(mutex);
 }
 
-long	get_long(pthread_mutex_t *mutex, long src)
+long	get_long(pthread_mutex_t *mutex, long *src)
 {
 	long value;
 
 	value = 0;
 	pthread_mutex_lock(mutex);
-	value = src;
+	value = *src;
 	pthread_mutex_unlock(mutex);
 	return (value);
 }
@@ -54,14 +54,14 @@ void	set_statut(t_philo *philo, t_statut src)
 	pthread_mutex_unlock(&philo->utils.mutex);
 }
 
-bool	get_bool(pthread_mutex_t *mutex, bool src)
+bool	get_bool(pthread_mutex_t *mutex, bool *src)
 {
 	bool	ret;
 
 	ret = false;
 	if (pthread_mutex_lock(mutex) != 0)
 		return (ret);
-	ret = src;
+	ret = *src;
 	pthread_mutex_unlock(mutex);
 	return (ret);
 }

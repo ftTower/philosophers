@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:17 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/06 00:07:24 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/07 18:26:33 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_sync
 	bool			end;
 	long			t_start;
 	pthread_mutex_t mutex;
+	pthread_mutex_t write_mutex;
 }					t_sync;
 
 typedef struct s_param

@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/29 21:25:38 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/07 17:55:33 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	monitor_maker(t_data *data, t_param template)
 	while (++index < template.n_philo)
 		data->monitor.all_status[index] = UNSET;
 	data->monitor.param = template;
-	data->monitor.sync = data->philos->sync;
+	data->monitor.sync = &data->sync;
 	data->monitor.philos = data->philos;
 	return (false);
 }
@@ -44,6 +44,7 @@ bool	philos_maker(t_data *data, t_param template)
 	data->philos = malloc(sizeof(t_philo) * template.n_philo);
 	if (!data->philos)
 		return (printf("failed to malloc philos\n"), true);
+	// pthread_mutex_init(&data.sync.mutex, NULL);
 	index = -1;
 	while (++index < template.n_philo)
 	{

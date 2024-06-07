@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 23:13:42 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/06 00:07:49 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/07 18:31:52 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	main(int argc, char **argv)
 	//! mutexs
 	
 	pthread_mutex_init(&data.sync.mutex, NULL);
+	pthread_mutex_init(&data.sync.write_mutex, NULL);
 	for (index = 0; index < data.philos[0].param.n_philo; index++)
 	{
 		pthread_mutex_init(&data.philos[index].utils.mutex, NULL);
@@ -45,9 +46,9 @@ int	main(int argc, char **argv)
 
 	//! start
 
-	set_long(&data.philos->sync->mutex, &data.philos->sync->t_start,
+	set_bool(&data.sync.mutex, &data.sync.all_ready, true);
+	set_long(&data.sync.mutex, &data.sync.t_start,
 		get_time(MILLISECOND));
-	set_bool(&data.philos->sync->mutex, &data.philos->sync->all_ready, true);
 	// set_long(&monitor->philos[0].sync->mutex,
 		// &monitor->philos->sync->t_start, get_time(MILLISECOND));
 	// usleep(500);

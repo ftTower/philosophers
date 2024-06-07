@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:00 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/28 23:43:59 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/07 18:07:41 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 
 //?getter and setter
 void	increase_long(pthread_mutex_t *mutex, long *src);
-long	get_long(pthread_mutex_t *mutex, long src);
+long	get_long(pthread_mutex_t *mutex, long *src);
 void	set_long(pthread_mutex_t *mutex, long *dst, long src);
-bool	get_bool(pthread_mutex_t *mutex, bool src);
+bool	get_bool(pthread_mutex_t *mutex, bool *src);
 void	set_bool(pthread_mutex_t *mutex, bool *dst, bool src);
 void	set_statut(t_philo *philo, t_statut src);
 t_statut	get_statut(t_philo *philo);
