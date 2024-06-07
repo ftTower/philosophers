@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 23:13:42 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/07 18:31:52 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/08 01:05:24 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,8 @@ int	main(int argc, char **argv)
 	index = -1;
 	pthread_create(&data.monitor.thread, NULL, monitor_life, &data);
 	while (++index < data.philos[0].param.n_philo)
-	{
 		pthread_create(&data.philos[index].utils.thread, NULL, philo_life,
 			&data.philos[index]);
-		// usleep(1);
-	}
 
 	//! start
 

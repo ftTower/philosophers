@@ -6,7 +6,7 @@
 #    By: tauer <tauer@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 17:59:50 by tauer             #+#    #+#              #
-#    Updated: 2024/05/27 23:40:49 by tauer            ###   ########.fr        #
+#    Updated: 2024/06/08 01:09:19 by tauer            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,11 @@ fclean : clean
 	@rm -f $(NAME)
 	@echo "Clean   : ./$(NAME)"
 
+test : 
+	@valgrind -s --leak-check=full --show-leak-kinds=all  ./philo 10 200 200 200 10
+
+hellgrind :
+	@valgrind --tool=helgrind ./philo 10 500 500 500 10
 
 re: fclean all clear 
 
