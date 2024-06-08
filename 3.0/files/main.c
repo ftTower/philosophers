@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 23:13:42 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/29 00:02:40 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/08 01:48:29 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,12 @@ void	*philo_life(void *in_philo)
 	philo = (t_philo *)in_philo;
 	increase_long(philo->sync->mutex, &philo->sync->n_threads);
 	set_bool(philo->sync->mutex, &philo->sync->ready[philo->id], true);
-	while (!get_bool(philo->sync->mutex, philo->sync->all_ready))
+	while (!get_bool(philo->sync->mutex, &philo->sync->all_ready))
 		;
 	philo->statut.t_spawn = get_time(MILLISECOND);
 	if (philo->id % 2 == 0)
 		usleep(philo->lifetime.t_eat);
-	while (!get_bool(philo->sync->mutex, philo->sync->end))
+	while (!get_bool(philo->sync->mutex, &philo->sync->end))
 		life(philo);
 	return (NULL);
 }

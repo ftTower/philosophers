@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:00 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/22 02:32:24 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/08 01:47:44 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	data_free(t_data *data);
 
 //!getter and setter
 void	set_bool(pthread_mutex_t mutex, bool *value, bool to_set);
-bool	get_bool(pthread_mutex_t mutex, bool to_get);
+bool	get_bool(pthread_mutex_t mutex, bool *to_get);
 void	increase_long(pthread_mutex_t mutex, long *to_set);
 
 //!utils

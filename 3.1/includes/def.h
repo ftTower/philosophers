@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:00 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/07 18:07:41 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/08 02:39:18 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	t_putnbr(t_color color, long value, bool lignfeed, bool format);
 
 //!print
 void	debug_philos(t_philo *philos, long size);
+void	print_action_subject(t_statut statut, t_philo *philo, bool print);
+
 
 
 //*utils

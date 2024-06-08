@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 23:41:09 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/08 01:26:37 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/08 02:38:07 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,28 +40,32 @@ void	meal_statut_printer(t_monitor *monitor)
 	t_putstr(MAGENTA, "|", true);
 }
 
-// void	all_statut_printer(t_monitor *monitor)
-// {
-// 	long	index;
+void	all_statut_printer(t_monitor *monitor, bool monitor_graph)
+{
+	long	index;
 
-// 	index = -1;
-// 	// printf("\033c");
-// 	t_putnbr(MAGENTA, get_time(MILLISECOND) - monitor->sync->t_start, false,
-// 		true);
-// 	t_putstr(MAGENTA, " |", false);
-// 	while (++index < monitor->param.n_philo)
-// 	{
-// 		if (monitor->all_status[index] == EAT)
-// 			t_putstr(BG_GREEN, " ", false);
-// 		else if (monitor->all_status[index] == THINK)
-// 			t_putstr(BG_WHITE, " ", false);
-// 		else if (monitor->all_status[index] == SLEEP)
-// 			t_putstr(BG_RED, " ", false);
-// 		else if (monitor->all_status[index] == UNSET)
-// 			t_putstr(RED, "  ", false);
-// 	}
-// 	t_putstr(MAGENTA, "|", true);
-// }
+	index = -1;
+	if (monitor_graph)
+		meal_statut_printer(monitor);
+	else
+	{
+		t_putnbr(MAGENTA, get_time(MILLISECOND) - monitor->sync->t_start, false,
+			true);
+		t_putstr(MAGENTA, " |", false);
+		while (++index < monitor->param.n_philo)
+		{
+			if (monitor->all_status[index] == EAT)
+				t_putstr(BG_GREEN, " ", false);
+			else if (monitor->all_status[index] == THINK)
+				t_putstr(BG_WHITE, " ", false);
+			else if (monitor->all_status[index] == SLEEP)
+				t_putstr(BG_RED, " ", false);
+			else if (monitor->all_status[index] == UNSET)
+				t_putstr(RED, "  ", false);
+		}
+		t_putstr(MAGENTA, "|", true);
+	}
+}
 
 void	is_ready_to_eat(t_data *data, long index)
 {
@@ -93,23 +97,24 @@ void	is_end(t_data *data, long index)
 		set_bool(&data->sync.mutex, &data->sync.end, true);
 }
 
-void	monitor_process(t_data *data)
+void	monitor_process(t_data *data, bool display)
 {
-	long index;
-	long 	min_meals;
-	long 	comp;
-	
+	long	index;
+	long	min_meals;
+	long	comp;
+
 	while (!get_bool(&data->sync.mutex, &data->sync.end))
 	{
 		min_meals = __LONG_MAX__;
-		if ((get_time(MILLISECOND) - data->sync.t_start) % 10 == 0)
+		if (display && (get_time(MILLISECOND) - data->sync.t_start) % 10 == 0)
 			meal_statut_printer(&data->monitor);
 		index = -1;
 		while (++index < data->monitor.param.n_philo)
 		{
 			is_ready_to_eat(data, index);
 			is_end(data, index);
-			comp = get_long(&data->philos[index].info.mutex, &data->philos[index].info.n_meal);
+			comp = get_long(&data->philos[index].info.mutex,
+					&data->philos[index].info.n_meal);
 			if (comp < min_meals)
 				min_meals = comp;
 			data->monitor.all_status[index] = get_statut(&data->philos[index]);
@@ -117,7 +122,7 @@ void	monitor_process(t_data *data)
 		if (min_meals >= data->monitor.param.max_meal)
 			set_bool(&data->sync.mutex, &data->sync.end, true);
 		// all_statut_printer(&data->monitor);
-		usleep(20);
+		usleep(42);
 	}
 }
 
@@ -130,6 +135,10 @@ void	*monitor_life(void *in_data)
 	index = -1;
 	while (!get_bool(&data->sync.mutex, &data->sync.all_ready))
 		write(1, "", 0);
-	monitor_process(data);
+	while (++index < data->monitor.param.n_philo)
+		is_ready_to_eat(data, index);
+	set_bool(&data->sync.mutex, &data->sync.monitor_ready, true);
+	set_long(&data->sync.mutex, &data->sync.t_start, get_time(MILLISECOND));
+	monitor_process(data, false);
 	return (NULL);
 }

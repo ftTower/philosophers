@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 23:19:48 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/22 23:30:54 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/08 01:47:08 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	set_bool(pthread_mutex_t mutex, bool *value, bool to_set)
 	pthread_mutex_unlock(&mutex); 
 }
 
-bool	get_bool(pthread_mutex_t mutex, bool to_get)
+bool	get_bool(pthread_mutex_t mutex, bool *to_get)
 {
 	bool ret;
 	

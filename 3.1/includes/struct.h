@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:17 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/07 18:26:33 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/08 02:36:31 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef enum e_statut
 typedef struct s_sync
 {
 	bool			all_ready;
+	bool			monitor_ready;
 	bool			end;
 	long			t_start;
 	pthread_mutex_t mutex;

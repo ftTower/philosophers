@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:47:19 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/08 01:27:44 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/08 02:38:31 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,48 @@ void	debug_philos(t_philo *philos, long size)
 		t_putstr(WHITE, "| n meal : ", false);
 		t_putnbr(BLUE, philos[index].info.n_meal, true, true);
 	}
-	t_putstr(MAGENTA, "+=============================================\n", false);
+	t_putstr(MAGENTA, "+=============================================\n",
+		false);
+}
+
+void	print_action_subject(t_statut statut, t_philo *philo, bool print)
+{
+	if (!print)
+		return ;
+	pthread_mutex_lock(&philo->sync->write_mutex);
+	if (statut == EAT)
+	{
+		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
+			true);
+		t_putstr(WHITE, " ", false);
+		t_putnbr(WHITE, philo->id + 1, false, false);
+		t_putstr(MAGENTA, " has taken a fork", true);
+		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
+			true);
+		t_putstr(WHITE, " ", false);
+		t_putnbr(WHITE, philo->id + 1, false, false);
+		t_putstr(MAGENTA, " has taken a fork", true);
+		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
+			true);
+		t_putstr(WHITE, " ", false);
+		t_putnbr(WHITE, philo->id + 1, false, false);
+		t_putstr(MAGENTA, " is eating", true);
+	}
+	else if (statut == SLEEP)
+	{
+		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
+			true);
+		t_putstr(WHITE, " ", false);
+		t_putnbr(WHITE, philo->id + 1, false, false);
+		t_putstr(MAGENTA, " is sleeping", true);
+	}
+	else if (statut == THINK)
+	{
+		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
+			true);
+		t_putstr(WHITE, " ", false);
+		t_putnbr(WHITE, philo->id + 1, false, false);
+		t_putstr(MAGENTA, " is thinking", true);
+	}
+	pthread_mutex_unlock(&philo->sync->write_mutex);
 }

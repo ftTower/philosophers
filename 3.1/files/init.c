@@ -6,11 +6,12 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/07 17:55:33 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/08 02:35:33 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <all.h>
+
 
 bool	param_getter(t_param *template, char **argv)
 {
@@ -71,11 +72,12 @@ bool	philos_maker(t_data *data, t_param template)
 bool	init_data(t_data *data, char **argv)
 {
 	t_param template;
-
+	
 	data->sync.all_ready = false;
 	data->sync.end = false;
+	data->sync.monitor_ready = false;
 	if (param_getter(&template, argv) || philos_maker(data, template)
 		|| monitor_maker(data, template))
 		return (printf("failed to init data\n"), true);
-	return (printf("init ok\n"),false);
+	return (printf("init ok\n"), false);
 }
