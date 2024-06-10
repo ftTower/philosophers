@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:00 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/10 02:18:10 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/10 02:51:13 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_statut	get_statut(t_philo *philo);
 bool		init_data(t_data *data, char **argv);
 
 //?monitor // philo
+void		lone_philo(t_param *template);
 void		*philo_life(void *in_philo);
 void		*monitor_life(void *in_monitor);
 

@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 23:41:09 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/10 01:46:48 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/10 02:55:00 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	monitor_process(t_data *data, bool display)
 			is_ready_to_eat(data, index);
 			data->monitor.all_status[index] = get_statut(&data->philos[index]);
 		}
-		if (min_meals >= data->monitor.param.max_meal)
+		if (data->monitor.param.max_meal > -1 && min_meals >= data->monitor.param.max_meal)
 			set_bool(&data->sync.mutex, &data->sync.end, true);
 		usleep(42);
 	}

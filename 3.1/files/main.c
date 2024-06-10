@@ -6,20 +6,18 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 23:13:42 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/10 02:21:48 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/10 02:50:50 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <all.h>
-
-
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 	long index;
 
-	if (argc < 5 || argc > 6 || init_data(&data, argv + 1))
+	if (argc < 5 || argc > 6  || init_data(&data, argv + 1))
 		return (printf("failure\n"), EXIT_FAILURE);
 	index = -1;
 	pthread_create(&data.monitor.thread, NULL, monitor_life, &data);

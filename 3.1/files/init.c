@@ -6,11 +6,13 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/10 02:22:16 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/10 02:50:43 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <all.h>
+
+
 
 bool	param_getter(t_param *template, char **argv)
 {
@@ -18,6 +20,8 @@ bool	param_getter(t_param *template, char **argv)
 			&template->t_eat, true) || !ft_atoi(argv[2], &template->t_die, true)
 		|| !ft_atoi(argv[3], &template->t_sleep, true))
 		return (printf("failed to atoi input\n"), true);
+	else if (template->n_philo == 1)
+		return (lone_philo(template), true);
 	return (ft_atoi(argv[4], &template->max_meal, false), false);
 }
 

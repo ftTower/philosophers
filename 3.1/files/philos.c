@@ -6,11 +6,21 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:35:43 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/10 02:19:21 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/10 02:51:00 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <all.h>
+
+void	lone_philo(t_param *template)
+{
+	printf("%-6ld %-6ld ", (long)0, (long)1);
+	t_putstr(YELLOW, "is thinking", true);
+	usleep(template->t_die);
+	printf("%-6ld %-6ld ", template->t_die, (long)1);
+	t_putstr(BG_RED, "is dead", true);
+	exit(EXIT_SUCCESS);
+}
 
 void	life(t_philo *philo, bool print)
 {

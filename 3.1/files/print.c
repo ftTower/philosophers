@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:47:19 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/10 02:17:26 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/10 02:56:47 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,17 @@ void	print_statut_lock(t_statut statut, t_philo *philo, bool print,
 			&philo->sync->t_start), false, true);
 	t_putstr(WHITE, " ", false);
 	t_putnbr(WHITE, philo->id + 1, false, false);
+	t_putstr(WHITE, " ", false);
 	if (is_fork)
-		t_putstr(CYAN, " has taken a fork", true);
+		t_putstr(CYAN, "has taken a fork", true);
 	else if (statut == EAT)
-		t_putstr(GREEN, " is eating", true);
+		t_putstr(GREEN, "is eating", true);
 	else if (statut == SLEEP)
-		t_putstr(YELLOW, " is sleeping", true);
+		t_putstr(YELLOW, "is sleeping", true);
 	else if (statut == THINK)
-		t_putstr(BLUE, " is thinking", true);
+		t_putstr(BLUE, "is thinking", true);
 	else if (statut == DEAD)
-		t_putstr(BG_RED, " is dead", true);
+		t_putstr(BG_RED, "is dead", true);
 	pthread_mutex_unlock(&philo->sync->write_mutex);
 }
 
