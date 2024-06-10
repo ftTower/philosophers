@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:47:19 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/08 02:38:31 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/10 02:17:26 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,44 +63,54 @@ void	debug_philos(t_philo *philos, long size)
 		false);
 }
 
-void	print_action_subject(t_statut statut, t_philo *philo, bool print)
+void	print_statut_lock(t_statut statut, t_philo *philo, bool print,
+		bool is_fork)
 {
 	if (!print)
 		return ;
+	if (get_bool(&philo->sync->mutex, &philo->sync->end))
+		return ;
 	pthread_mutex_lock(&philo->sync->write_mutex);
-	if (statut == EAT)
-	{
-		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
-			true);
-		t_putstr(WHITE, " ", false);
-		t_putnbr(WHITE, philo->id + 1, false, false);
-		t_putstr(MAGENTA, " has taken a fork", true);
-		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
-			true);
-		t_putstr(WHITE, " ", false);
-		t_putnbr(WHITE, philo->id + 1, false, false);
-		t_putstr(MAGENTA, " has taken a fork", true);
-		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
-			true);
-		t_putstr(WHITE, " ", false);
-		t_putnbr(WHITE, philo->id + 1, false, false);
-		t_putstr(MAGENTA, " is eating", true);
-	}
+	t_putnbr(WHITE, get_time(MILLISECOND) - get_long(&philo->sync->mutex,
+			&philo->sync->t_start), false, true);
+	t_putstr(WHITE, " ", false);
+	t_putnbr(WHITE, philo->id + 1, false, false);
+	if (is_fork)
+		t_putstr(CYAN, " has taken a fork", true);
+	else if (statut == EAT)
+		t_putstr(GREEN, " is eating", true);
 	else if (statut == SLEEP)
-	{
-		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
-			true);
-		t_putstr(WHITE, " ", false);
-		t_putnbr(WHITE, philo->id + 1, false, false);
-		t_putstr(MAGENTA, " is sleeping", true);
-	}
+		t_putstr(YELLOW, " is sleeping", true);
 	else if (statut == THINK)
-	{
-		t_putnbr(WHITE, get_time(MILLISECOND) - philo->sync->t_start, false,
-			true);
-		t_putstr(WHITE, " ", false);
-		t_putnbr(WHITE, philo->id + 1, false, false);
-		t_putstr(MAGENTA, " is thinking", true);
-	}
+		t_putstr(BLUE, " is thinking", true);
+	else if (statut == DEAD)
+		t_putstr(BG_RED, " is dead", true);
 	pthread_mutex_unlock(&philo->sync->write_mutex);
+}
+
+void	meal_statut_printer(t_monitor *monitor)
+{
+	long	index;
+	long	n_meal;
+
+	index = -1;
+	t_putnbr(MAGENTA, get_time(MILLISECOND) - get_long(&monitor->sync->mutex,
+			&monitor->sync->t_start), false, true);
+	t_putstr(MAGENTA, " |", false);
+	while (++index < monitor->param.n_philo)
+	{
+		n_meal = get_long(&monitor->philos[index].info.mutex,
+				&monitor->philos[index].info.n_meal);
+		if (monitor->philos[index].info.dead)
+			t_putstr(BG_RED, "   ", false);
+		else if (monitor->all_status[index] == EAT)
+			t_putnbr(BG_GREEN, n_meal, false, false);
+		else if (monitor->all_status[index] == THINK)
+			t_putnbr(BG_WHITE, n_meal, false, false);
+		else if (monitor->all_status[index] == SLEEP)
+			t_putnbr(BG_RED, n_meal, false, false);
+		else if (monitor->all_status[index] == UNSET)
+			t_putnbr(RED, n_meal, false, false);
+	}
+	t_putstr(MAGENTA, "|", true);
 }

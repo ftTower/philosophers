@@ -6,7 +6,7 @@
 #    By: tauer <tauer@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 17:59:50 by tauer             #+#    #+#              #
-#    Updated: 2024/06/08 01:44:46 by tauer            ###   ########.fr        #
+#    Updated: 2024/06/10 01:55:22 by tauer            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ CFLAG		=	-Wall -Wextra -Werror -I./includes -g3
 
 SRC			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/init.c\
+				$(SRC_DIR)/bool.c \
+				$(SRC_DIR)/mutex.c \
 				$(SRC_DIR)/utils.c \
 				$(SRC_DIR)/print.c \
 				$(SRC_DIR)/printer.c \
