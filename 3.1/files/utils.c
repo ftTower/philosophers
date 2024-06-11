@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:29:06 by tauer             #+#    #+#             */
-/*   Updated: 2024/05/21 22:12:22 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/10 16:09:01 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ long	get_time(t_metric code)
 	else if (code == SECOND)
 		return (tv.tv_sec + (tv.tv_usec / 1e6));
 	else if (code == MILLISECOND)
-		return ((tv.tv_sec * 1e3) + (tv.tv_usec / 1e3));
+		return ((tv.tv_sec * 1e3 + tv.tv_usec / 1e3));
 	else if (code == MICROSECOND)
 		return ((tv.tv_sec * 1e6) + tv.tv_usec);
 	return (-1);

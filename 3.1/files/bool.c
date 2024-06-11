@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 01:41:50 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/10 02:19:42 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/11 02:54:03 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ bool	is_dead(t_data *data, long index)
 	time = get_time(MILLISECOND);
 	comp = get_long(&data->philos[index].info.mutex,
 			&data->philos[index].info.t_lastmeal);
-	if (comp == 0)
-		return (false);
+	// if (comp == 0)
+	// 	return (false);
 	if ((time - comp) >= data->monitor.param.t_die)
 		return (set_bool(&data->philos[index].info.mutex,
 				&data->philos[index].info.dead, true), print_statut_lock(DEAD,
