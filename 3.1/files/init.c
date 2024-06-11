@@ -12,8 +12,6 @@
 
 #include <all.h>
 
-
-
 bool	param_getter(t_param *template, char **argv)
 {
 	if (!ft_atoi(argv[0], &template->n_philo, false) || !ft_atoi(argv[1],
@@ -35,6 +33,7 @@ bool	monitor_maker(t_data *data, t_param template)
 	index = -1;
 	while (++index < template.n_philo)
 		data->monitor.all_status[index] = UNSET;
+	data->monitor.biggest_starvation = 0;
 	data->monitor.param = template;
 	data->monitor.sync = &data->sync;
 	data->monitor.philos = data->philos;

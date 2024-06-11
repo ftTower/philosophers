@@ -46,20 +46,20 @@ void	monitor_process(t_data *data, bool display)
 	while (!get_bool(&data->sync.mutex, &data->sync.end))
 	{
 		if (display && (get_time(MILLISECOND) - data->sync.t_start) % 10 == 0)
-			meal_statut_printer(&data->monitor);
+			monitor_print(&data->monitor, false);
 		min_meals = __LONG_MAX__;
 		index = -1;
 		comp = -1;
-		while (++index < data->monitor.param.n_philo && !is_dead(data, index)
-			&& !is_end(data, index) && min_meal(data, index, &min_meals, comp))
+		while (++index < data->monitor.param.n_philo && !is_dead(data, index) &&!is_end(data, index) && min_meal(data, index, &min_meals, comp))
 		{
 			is_ready_to_eat(data, index);
 			data->monitor.all_status[index] = get_statut(&data->philos[index]);
 		}
 		if (data->monitor.param.max_meal > -1 && min_meals >= data->monitor.param.max_meal)
 			set_bool(&data->sync.mutex, &data->sync.end, true);
-		usleep(42);
+		usleep(1);
 	}
+	monitor_print(&data->monitor, true);
 }
 
 void	*monitor_life(void *in_data)

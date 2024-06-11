@@ -96,6 +96,7 @@ typedef struct s_monitor
 	t_param			param;
 	t_sync			*sync;
 	t_statut		*all_status;
+	long			biggest_starvation;
 	pthread_t		thread;
 }					t_monitor;
 
