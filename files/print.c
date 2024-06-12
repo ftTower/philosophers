@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:47:19 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/13 00:21:20 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/13 01:12:46 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ void	print_statut_lock(t_statut statut, t_philo *philo, bool print,
 {
 	if (!print)
 		return ;
-	if (get_bool(&philo->sync->mutex, &philo->sync->end))
+	if (get_bool(philo->sync, &philo->sync->mutex, &philo->sync->end)
+		|| get_bool(philo->sync, &philo->info.mutex, &philo->info.dead))
 		return ;
 	pthread_mutex_lock(&philo->sync->write_mutex);
-	t_putnbr(WHITE, get_time(MILLISECOND) - get_long(&philo->sync->mutex,
+	t_putnbr(WHITE, get_time(MILLISECOND) \
+	- get_long(philo->sync, &philo->sync->mutex,
 			&philo->sync->t_start), false, true);
 	t_putstr(WHITE, " ", false);
 	t_putnbr(WHITE, philo->id + 1, false, false);
@@ -34,7 +36,7 @@ void	print_statut_lock(t_statut statut, t_philo *philo, bool print,
 	else if (statut == THINK)
 		t_putstr(BLUE, "is thinking", true);
 	else if (statut == DEAD)
-		t_putstr(BG_RED, "is dead", true);
+		t_putstr(BG_RED, "died", true);
 	pthread_mutex_unlock(&philo->sync->write_mutex);
 }
 
@@ -50,7 +52,7 @@ void	meal_statut_printer(t_monitor *monitor)
 	while (++index < monitor->param.n_philo)
 	{
 		n_meal = (get_time(MILLISECOND)
-				- get_long(&monitor->philos[index].info.mutex,
+				- get_long(monitor->sync, &monitor->philos[index].info.mutex,
 					&monitor->philos[index].info.t_lastmeal));
 		if (monitor->philos[index].info.dead)
 			t_putstr(BG_RED, "   ", false);

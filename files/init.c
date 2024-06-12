@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:24:47 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/12 00:18:15 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/13 00:49:02 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ bool	param_getter(t_param *template, char **argv)
 		return (printf("failed to atoi input\n"), true);
 	else if (template->n_philo == 1)
 		return (lone_philo(template), true);
-	return (ft_atoi(argv[4], &template->max_meal, false),
-		!(template->n_philo > 0 && template->t_die > 0 && template->t_eat > 0
-			&& template->t_sleep > 0));
+	if (ft_atoi(argv[4], &template->max_meal, false) && template->max_meal < 0)
+		return (true);
+	return (!(template->n_philo > 0 && template->t_die > 0
+			&& template->t_eat > 0 && template->t_sleep > 0));
 }
 
 bool	monitor_maker(t_data *data, t_param template)

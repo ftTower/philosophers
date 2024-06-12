@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:35:43 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/13 00:21:39 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/13 01:13:16 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,17 @@ void	lone_philo(t_param *template)
 
 void	life(t_philo *philo, bool print)
 {
-	if (get_bool(&philo->info.mutex, &philo->info.rdy_to_eat))
+	if (get_bool(philo->sync, &philo->info.mutex, &philo->info.rdy_to_eat))
 	{
 		set_statut(philo, EAT);
 		print_statut_lock(EAT, philo, print, false);
-		increase_long(&philo->info.mutex, &philo->info.n_meal);
-		set_long(&philo->info.mutex, &philo->info.t_lastmeal,
+		increase_long(philo->sync, &philo->info.mutex, &philo->info.n_meal);
+		set_long(philo->sync, &philo->info.mutex, &philo->info.t_lastmeal,
 			get_time(MILLISECOND));
 		usleep(philo->param.t_eat);
-		set_bool(&philo->info.mutex, &philo->info.rdy_to_eat, false);
+		set_bool(philo->sync, &philo->info.mutex, \
+		&philo->info.rdy_to_eat,
+			false);
 		set_statut(philo, SLEEP);
 		print_statut_lock(SLEEP, philo, print, false);
 		usleep(philo->param.t_sleep);
@@ -52,14 +54,16 @@ void	*philo_life(void *in_philo)
 	t_philo	*philo;
 
 	philo = (t_philo *)in_philo;
-	while (!get_bool(&philo->sync->mutex, &philo->sync->all_ready))
+	while (!get_bool(philo->sync, &philo->sync->mutex, &philo->sync->all_ready))
 		write(1, "", 0);
-	while (!get_bool(&philo->sync->mutex, &philo->sync->monitor_ready))
+	while (!get_bool(philo->sync, &philo->sync->mutex,
+			&philo->sync->monitor_ready))
 		write(1, "", 0);
 	usleep(1);
 	philo->info.t_spawn = get_time(MILLISECOND);
-	set_long(&philo->info.mutex, &philo->info.t_lastmeal, philo->info.t_spawn);
-	while (!get_bool(&philo->sync->mutex, &philo->sync->end))
+	set_long(philo->sync, &philo->info.mutex, &philo->info.t_lastmeal,
+		philo->info.t_spawn);
+	while (!get_bool(philo->sync, &philo->sync->mutex, &philo->sync->end))
 		life(philo, !DEBUG_MODE);
 	return (NULL);
 }
