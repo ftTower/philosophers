@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:47:19 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/12 02:00:00 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/13 00:21:20 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,52 +38,20 @@ void	print_statut_lock(t_statut statut, t_philo *philo, bool print,
 	pthread_mutex_unlock(&philo->sync->write_mutex);
 }
 
-// void	meal_statut_printer(t_monitor *monitor)
-// {
-// 	long	index;
-// 	long	n_meal;
-
-// 	index = -1;
-// 	t_putnbr(MAGENTA, get_time(MILLISECOND) - get_long(&monitor->sync->mutex,
-// 			&monitor->sync->t_start), false, true);
-// 	t_putstr(MAGENTA, " |", false);
-// 	while (++index < monitor->param.n_philo)
-// 	{
-// 		n_meal = get_long(&monitor->philos[index].info.mutex,
-// 				&monitor->philos[index].info.n_meal);
-// 		if (monitor->philos[index].info.dead)
-// 			t_putstr(BG_RED, "   ", false);
-// 		else if (monitor->all_status[index] == EAT)
-// 			t_putnbr(BG_GREEN, n_meal, false, false);
-// 		else if (monitor->all_status[index] == THINK)
-// 			t_putnbr(BG_WHITE, n_meal, false, false);
-// 		else if (monitor->all_status[index] == SLEEP)
-// 			t_putnbr(BG_RED, n_meal, false, false);
-// 		else if (monitor->all_status[index] == UNSET)
-// 			t_putnbr(RED, n_meal, false, false);
-// 	}
-// 	t_putstr(MAGENTA, "|", true);
-// }
-
 void	meal_statut_printer(t_monitor *monitor)
 {
 	long	index;
 	long	n_meal;
 
 	index = -1;
-	// write(1, "\033c", 3);
-	t_putnbr(RED, monitor->param.t_die / 1e3, false, true);
-	t_putstr(MAGENTA, " | ", false);
 	t_putnbr(MAGENTA, get_time(MILLISECOND) - monitor->sync->t_start, false,
 		true);
 	t_putstr(MAGENTA, " | ", false);
 	while (++index < monitor->param.n_philo)
 	{
-		n_meal = get_long(&monitor->philos[index].info.mutex,
-				&monitor->philos[index].info.n_meal);
-		// n_meal = (get_time(MILLISECOND)
-		// 		- get_long(&monitor->philos[index].info.mutex,
-		// 		&monitor->philos[index].info.t_lastmeal));
+		n_meal = (get_time(MILLISECOND)
+				- get_long(&monitor->philos[index].info.mutex,
+					&monitor->philos[index].info.t_lastmeal));
 		if (monitor->philos[index].info.dead)
 			t_putstr(BG_RED, "   ", false);
 		else if (monitor->all_status[index] == EAT)
@@ -94,8 +62,6 @@ void	meal_statut_printer(t_monitor *monitor)
 			t_putnbr(BG_RED, n_meal, false, true);
 		else if (monitor->all_status[index] == UNSET)
 			t_putnbr(RED, n_meal, false, true);
-		t_putnbr(MAGENTA, (bool)monitor->philos[index].info.rdy_to_eat, false,
-			true);
 	}
 	t_putstr(MAGENTA, "|", true);
 }

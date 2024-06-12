@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:35:43 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/12 02:01:24 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/13 00:21:39 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,12 @@ void	life(t_philo *philo, bool print)
 {
 	if (get_bool(&philo->info.mutex, &philo->info.rdy_to_eat))
 	{
-		// set_statut(philo, EAT);
+		set_statut(philo, EAT);
 		print_statut_lock(EAT, philo, print, false);
-		// set_long(&philo->info.mutex, &philo->info.t_lastmeal,
-		// 	get_time(MILLISECOND));
 		increase_long(&philo->info.mutex, &philo->info.n_meal);
-		usleep(philo->param.t_eat);
 		set_long(&philo->info.mutex, &philo->info.t_lastmeal,
-			get_time(MILLISECOND));		
+			get_time(MILLISECOND));
+		usleep(philo->param.t_eat);
 		set_bool(&philo->info.mutex, &philo->info.rdy_to_eat, false);
 		set_statut(philo, SLEEP);
 		print_statut_lock(SLEEP, philo, print, false);
@@ -45,7 +43,6 @@ void	life(t_philo *philo, bool print)
 		{
 			print_statut_lock(THINK, philo, print, false);
 			set_statut(philo, THINK);
-			// usleep(philo->param.t_eat / 2);
 		}
 	}
 }
