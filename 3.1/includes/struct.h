@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:08:17 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/08 02:36:31 by tauer            ###   ########.fr       */
+/*   Updated: 2024/06/11 23:50:39 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef enum e_color
 	BG_WHITE,
 	BG_GREEN,
 	BG_RED,
-}						t_color;
+}					t_color;
 
 typedef enum e_statut
 {
@@ -49,8 +49,8 @@ typedef struct s_sync
 	bool			monitor_ready;
 	bool			end;
 	long			t_start;
-	pthread_mutex_t mutex;
-	pthread_mutex_t write_mutex;
+	pthread_mutex_t	mutex;
+	pthread_mutex_t	write_mutex;
 }					t_sync;
 
 typedef struct s_param
@@ -73,13 +73,13 @@ typedef struct s_memory
 
 typedef struct s_info
 {
-	long t_spawn;
-	long t_lastmeal;
-	long n_meal;
-	bool rdy_to_eat;
-	bool dead;
-	pthread_mutex_t mutex;
-}	t_info;
+	long			t_spawn;
+	long			t_lastmeal;
+	long			n_meal;
+	bool			rdy_to_eat;
+	bool			dead;
+	pthread_mutex_t	mutex;
+}					t_info;
 
 typedef struct s_philo
 {
@@ -87,12 +87,12 @@ typedef struct s_philo
 	t_param			param;
 	t_memory		utils;
 	t_info			info;
-	t_sync 			*sync;
+	t_sync			*sync;
 }					t_philo;
 
 typedef struct s_monitor
 {
-	t_philo 		*philos;
+	t_philo			*philos;
 	t_param			param;
 	t_sync			*sync;
 	t_statut		*all_status;
@@ -104,7 +104,7 @@ typedef struct s_data
 {
 	t_philo			*philos;
 	t_monitor		monitor;
-	t_sync 			sync;
+	t_sync			sync;
 }					t_data;
 
 #endif
