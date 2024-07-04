@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 23:13:42 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/13 01:13:03 by tauer            ###   ########.fr       */
+/*   Updated: 2024/07/04 16:47:32 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char **argv)
 	while (++index < data.philos[0].param.n_philo)
 		pthread_create(&data.philos[index].utils.thread, NULL, philo_life,
 			&data.philos[index]);
-	set_bool(&data.sync, &data.sync.mutex, &data.sync.all_ready, true);
+	set_bool(&data.sync.mutex, &data.sync.all_ready, true);
 	index = -1;
 	pthread_join(data.monitor.thread, NULL);
 	while (++index < data.philos[0].param.n_philo)

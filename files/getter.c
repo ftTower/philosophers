@@ -6,21 +6,19 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:08:29 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/13 01:13:28 by tauer            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:04:25 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <all.h>
 
-bool	get_bool(t_sync *sync, pthread_mutex_t *mutex, bool *src)
+bool	get_bool(pthread_mutex_t *mutex, bool *src)
 {
 	bool	ret;
 
-	if (pthread_mutex_lock(mutex) != 0)
-		set_bool(sync, &sync->mutex, &sync->end, true);
+	pthread_mutex_lock(mutex);
 	ret = *src;
-	if (pthread_mutex_unlock(mutex) != 0)
-		set_bool(sync, &sync->mutex, &sync->end, true);
+	pthread_mutex_unlock(mutex);
 	return (ret);
 }
 
@@ -29,23 +27,19 @@ t_statut	get_statut(t_philo *philo)
 	t_statut	statut;
 
 	statut = UNSET;
-	if (pthread_mutex_lock(&philo->utils.mutex))
-		set_bool(philo->sync, &philo->sync->mutex, &philo->sync->end, true);
+	pthread_mutex_lock(&philo->utils.mutex);
 	statut = philo->utils.statut;
-	if (pthread_mutex_unlock(&philo->utils.mutex))
-		set_bool(philo->sync, &philo->sync->mutex, &philo->sync->end, true);
+	pthread_mutex_unlock(&philo->utils.mutex);
 	return (statut);
 }
 
-long	get_long(t_sync *sync, pthread_mutex_t *mutex, long *src)
+long	get_long(pthread_mutex_t *mutex, long *src)
 {
 	long	value;
 
 	value = 0;
-	if (pthread_mutex_lock(mutex) != 0)
-		set_bool(sync, &sync->mutex, &sync->end, true);
+	pthread_mutex_lock(mutex);
 	value = *src;
-	if (pthread_mutex_unlock(mutex) != 0)
-		set_bool(sync, &sync->mutex, &sync->end, true);
+	pthread_mutex_unlock(mutex);
 	return (value);
 }
