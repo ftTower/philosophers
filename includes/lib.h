@@ -20,5 +20,6 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <../files/printf/ft_printf.h>
 
 #endif

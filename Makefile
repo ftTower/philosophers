@@ -27,6 +27,10 @@ SRC			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/monitor.c \
 				$(SRC_DIR)/philos.c \
 				$(SRC_DIR)/debug.c \
+				$(SRC_DIR)/printf/ft_printf.c \
+				$(SRC_DIR)/printf/print_functions.c \
+				$(SRC_DIR)/printf/print_functions2.c \
+				$(SRC_DIR)/printf/utils.c \
 			
 CC			=	cc 
 
