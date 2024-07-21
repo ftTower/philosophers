@@ -6,21 +6,23 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 00:47:19 by tauer             #+#    #+#             */
-/*   Updated: 2024/07/04 16:54:56 by tauer            ###   ########.fr       */
+/*   Updated: 2024/07/21 14:55:16 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <all.h>
 
-void print_statut_lock(t_statut statut, t_philo *philo, bool print,
-					   bool is_fork)
+void	print_statut_lock(t_statut statut, t_philo *philo, bool print,
+		bool is_fork)
 {
 	if (!print)
-		return;
-	if (get_bool(&philo->sync->mutex, &philo->sync->end) || get_bool(&philo->info.mutex, &philo->info.dead))
-		return;
+		return ;
+	if (get_bool(&philo->sync->mutex, &philo->sync->end)
+		|| get_bool(&philo->info.mutex, &philo->info.dead))
+		return ;
 	pthread_mutex_lock(&philo->sync->write_mutex);
-	t_putnbr(WHITE, get_time(MILLISECOND) - get_long(&philo->sync->mutex, &philo->sync->t_start), false, true);
+	t_putnbr(WHITE, get_time(MILLISECOND) - get_long(&philo->sync->mutex,
+			&philo->sync->t_start), false, true);
 	t_putstr(WHITE, " ", false);
 	t_putnbr(WHITE, philo->id + 1, false, false);
 	t_putstr(WHITE, " ", false);
@@ -37,34 +39,39 @@ void print_statut_lock(t_statut statut, t_philo *philo, bool print,
 	pthread_mutex_unlock(&philo->sync->write_mutex);
 }
 
-void meal_statut_printer(t_monitor *monitor)
+void	statut_printer(t_monitor *monitor, long index)
 {
-	long index;
-	long n_meal;
+	long	n_meal;
 
-	index = -1;
-	t_putnbr_only_for_cool_print_with_monitor(MAGENTA, get_time(MILLISECOND) - monitor->sync->t_start, false,
-											  true);
-	t_putstr_only_for_cool_print_with_monitor(MAGENTA, " | ", false);
-	while (++index < monitor->param.n_philo)
-	{
-		n_meal = (get_time(MILLISECOND) - get_long(&monitor->philos[index].info.mutex,
-												   &monitor->philos[index].info.t_lastmeal));
-		if (monitor->philos[index].info.dead)
-			t_putstr_only_for_cool_print_with_monitor(BG_RED, "   ", false);
-		else if (monitor->all_status[index] == EAT)
-			t_putnbr_only_for_cool_print_with_monitor(BG_GREEN, n_meal, false, true);
-		else if (monitor->all_status[index] == THINK)
-			t_putnbr_only_for_cool_print_with_monitor(BG_WHITE, n_meal, false, true);
-		else if (monitor->all_status[index] == SLEEP)
-			t_putnbr_only_for_cool_print_with_monitor(BG_RED, n_meal, false, true);
-		else if (monitor->all_status[index] == UNSET)
-			t_putnbr_only_for_cool_print_with_monitor(RED, n_meal, false, true);
-	}
-	t_putstr_only_for_cool_print_with_monitor(MAGENTA, "|", true);
+	n_meal = (get_time(MILLISECOND)
+			- get_long(&monitor->philos[index].info.mutex,
+				&monitor->philos[index].info.t_lastmeal));
+	if (monitor->philos[index].info.dead)
+		t_putstr(BG_RED, "   ", false);
+	else if (monitor->all_status[index] == EAT)
+		t_putnbr(BG_GREEN, n_meal, false, true);
+	else if (monitor->all_status[index] == THINK)
+		t_putnbr(BG_WHITE, n_meal, false, true);
+	else if (monitor->all_status[index] == SLEEP)
+		t_putnbr(BG_RED, n_meal, false, true);
+	else if (monitor->all_status[index] == UNSET)
+		t_putnbr(RED, n_meal, false, true);
 }
 
-void monitor_print(t_monitor *monitor, bool finished)
+void	meal_statut_printer(t_monitor *monitor)
+{
+	long	index;
+
+	index = -1;
+	t_putnbr(MAGENTA, get_time(MILLISECOND) - monitor->sync->t_start, false,
+		true);
+	t_putstr(MAGENTA, " | ", false);
+	while (++index < monitor->param.n_philo)
+		statut_printer(monitor, index);
+	t_putstr(MAGENTA, "|", true);
+}
+
+void	monitor_print(t_monitor *monitor, bool finished)
 {
 	if (!finished)
 		meal_statut_printer(monitor);

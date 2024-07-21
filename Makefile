@@ -6,7 +6,7 @@
 #    By: tauer <tauer@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 17:59:50 by tauer             #+#    #+#              #
-#    Updated: 2024/06/12 00:11:57 by tauer            ###   ########.fr        #
+#    Updated: 2024/07/21 14:56:31 by tauer            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,10 +27,6 @@ SRC			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/monitor.c \
 				$(SRC_DIR)/philos.c \
 				$(SRC_DIR)/debug.c \
-				$(SRC_DIR)/printf/ft_printf.c \
-				$(SRC_DIR)/printf/print_functions.c \
-				$(SRC_DIR)/printf/print_functions2.c \
-				$(SRC_DIR)/printf/utils.c \
 			
 CC			=	cc 
 

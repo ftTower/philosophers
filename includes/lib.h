@@ -6,7 +6,7 @@
 /*   By: tauer <tauer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 00:07:09 by tauer             #+#    #+#             */
-/*   Updated: 2024/06/11 23:50:49 by tauer            ###   ########.fr       */
+/*   Updated: 2024/07/21 14:50:54 by tauer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,5 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
-# include <../files/printf/ft_printf.h>
 
 #endif
