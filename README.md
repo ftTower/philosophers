@@ -37,10 +37,15 @@ The program `philo` should be executed with the following arguments:
 The program should output the state of each philosopher in the following format:
 
 [timestamp_in_ms] X has taken a fork
+
 [timestamp_in_ms] X is eating
+
 [timestamp_in_ms] X is sleeping
+
 [timestamp_in_ms] X is thinking
+
 [timestamp_in_ms] X died
+
 
 Where `timestamp_in_ms` is the current time in milliseconds and `X` is the philosopher's number.
 
