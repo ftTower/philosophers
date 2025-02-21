@@ -77,11 +77,4 @@ To run the program, use the following syntax:
 ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]
 ```
 
-Additional Notes
-Memory Management: Ensure that all dynamically allocated memory is properly freed to avoid memory leaks.
-Error Handling: The program should handle all possible errors gracefully, such as invalid arguments or memory allocation failures.
-Synchronization: Proper synchronization is crucial to avoid race conditions and ensure that the simulation runs correctly.
 
-Conclusion
-This project serves as an excellent exercise in concurrent programming, synchronization, and resource management. By carefully adhering to the requirements and handling synchronization properly, you can create a robust and functional solution to the Dining Philosophers problem.
-make
